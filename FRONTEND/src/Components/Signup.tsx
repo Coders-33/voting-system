@@ -2,9 +2,16 @@ import React from 'react'
 
 function Signup() {
   return (
-    <div>
+   <>
+   
+   <div>
       this is a singnup
     </div>
+   
+   
+   </>
+
+    
   )
 }
 
