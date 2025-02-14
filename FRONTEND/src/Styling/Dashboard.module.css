@@ -39,3 +39,16 @@
   align-items: center;
   gap: 20px;
 }
+
+
+.bottomContainer  {
+    color : white;
+     border : 1px solid white;
+     display: flex;
+     justify-content:  space-around;
+}
+
+.bottomContainer #voteNow {
+     width: 400px;
+     border-radius: 50%;
+}
