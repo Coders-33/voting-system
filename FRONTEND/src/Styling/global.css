@@ -1,6 +1,7 @@
 html, body {
     background-color: rgb(25, 25, 25) !important;
     height: 100%;
+    overflow-x : hidden;
     margin: 0;
     padding: 0;
 }
