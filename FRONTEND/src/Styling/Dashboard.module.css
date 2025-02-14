@@ -53,5 +53,25 @@
      border-radius: 50%;
 }
 
+.eachPartyInfo {
+   display: flex;
+   gap : 20px;
+  
+}
+
+
 /* footer  */
+
+hr { 
+  color: linear-gradient(#fccc63 , #fbad50 , #cd486b , #4c68d7 ,   #feda75
+   ,  #fa7e1e  ,  #d62976 , #962fbf  ,  #405DE6 , #962fbf );
+}
+
+
+
+
+ 
+
+
+
 
