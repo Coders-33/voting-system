@@ -48,15 +48,37 @@ function Dashboard() {
         <div style={{ display :'flex' , flexDirection  :"column" , gap :"20px", marginTop :"20px" }}> 
           
            {Images.map((image) => (
-            <img src={image} alt="" style={{ width: "100px"  ,borderRadius : "50%" }} />
+            <img src={image} alt=""   className={styles.parties}  />
           ))}
 
         </div>
+        
       </div>
 
-      <footer>
-        me sahil joshi creating footer
+
+<div className={styles.footerItems}>
+
+<footer>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWO5X5wTypXs_GdWc2lTJTvtVv-mjfXh8hPg&s" alt="instagram " />
+        <img src="https://e7.pngegg.com/pngimages/708/311/png-clipart-twitter-twitter-thumbnail.png" alt="Twitter" />
+        <img src="https://images.vexels.com/media/users/3/137253/isolated/preview/90dd9f12fdd1eefb8c8976903944c026-facebook-icon-logo.png" alt="facebook" />
       </footer>
+
+</div>
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+
     </>
   );
 }
