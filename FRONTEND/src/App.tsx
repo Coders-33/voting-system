@@ -1,12 +1,21 @@
-import  from "./Components/Login"
+import Login from "./Components/Login"
 
 
 function App() {
   return (
-    <div>
-      <Login/>
-      
-    </div>
+    <>
+   <BrowserRouter>
+   
+    <Routes>
+    <Route path="/" element={<Dashboard/>} />
+     
+     <Route path="/login" element={<Login/>} />
+
+    </Routes>
+   </BrowserRouter>
+
+
+    </>
   )
 }
 
