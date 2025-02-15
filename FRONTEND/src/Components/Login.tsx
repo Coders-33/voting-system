@@ -15,7 +15,11 @@ function Login() {
     const passInputRef = useRef<HTMLInputElement>(null);
     const passRef = useRef<HTMLSpanElement>(null);
 
+    const studentIdRef = useRef<HTMLSpanElement>(null);
+    const studentInputRef = useRef<HTMLInputElement>(null);
 
+    
+    const [studentIdValue , setStudentId]  = useState<string>("");
     const [emailValue, setEmailValue] = useState<string>("");
     const [passValue, setPassValue] = useState<string>("");
 
@@ -67,16 +71,41 @@ function Login() {
 
     }, [passValue, passInputRef]);
 
+    useEffect(() => {
+
+        const StudentInput = studentInputRef.current;
+        const StudentBox = studentIdRef.current;
+
+        if (StudentInput && StudentBox) {
+
+
+            StudentInput.addEventListener("focus", () => handleFocus(StudentBox));
+            StudentInput.addEventListener("blur", () => handleBlur(StudentBox));
+
+
+            if (studentIdValue != "") StudentInput.addEventListener("blur", () => handleFocus(StudentBox));
+
+            return () => {
+                StudentInput.removeEventListener("focus", () => handleFocus);
+                StudentInput.removeEventListener("blur", () => handleBlur);
+            };
+        }
+
+
+
+    }, [studentIdValue, studentInputRef]);
+
+
 
     function handleFocus(element: HTMLSpanElement) {
         element.style.top = "-20px";
-        element.style.color = "white";
+        element.style.color = "#1877F2";
         element.style.fontSize = "16px";
     }
 
     function handleBlur(element: HTMLSpanElement) {
         element.style.top = "5px";
-        element.style.color = "rgb(44, 44, 44)";
+        element.style.color = "white";
         element.style.fontSize = "1.4rem";
     }
 
@@ -112,11 +141,18 @@ function Login() {
                     <form onSubmit={handleLogIn} className={styles.formContainer}  >
 
                         <div id={styles.inputDiv} >
+                            <span ref={studentIdRef} id={styles.spanLabel}>Student Id*</span>
+                            <input ref={studentInputRef} id={styles.inputField}
+                                value={studentIdValue} onChange={(e) => setStudentId(e.target.value)}
+                                type="text" />
+                        </div>
+                        <div id={styles.inputDiv} >
                             <span ref={emailRef} id={styles.spanLabel}>Email*</span>
                             <input ref={emailInputRef} id={styles.inputField}
                                 value={emailValue} onChange={(e) => setEmailValue(e.target.value)}
                                 type="text" />
                         </div>
+
 
                         <div id={styles.inputDiv} >
                             <span ref={passRef} id={styles.spanLabel}>Password*</span>
@@ -126,21 +162,13 @@ function Login() {
                         </div>
 
                         <p onClick={handleForgetPassword}
-                            style={{ marginLeft: "20px", position: "absolute", top: "62%", cursor: "pointer" }}
+                            style={{ marginLeft: "20px", position: "absolute", top: "71%", cursor: "pointer" }}
                         >Forgot Password?</p>
 
                         <div style={{ display: "flex", justifyContent: "space-around", marginTop: "50px" }} >
 
-                            <button type="submit" style={{
-                                width: "150px", padding: "10px",
-                                border: "none", borderRadius: "10px", fontSize: "1.1rem", fontWeight: "bolder", color: "white", cursor: "pointer",
-                                backgroundColor: "#392463"
-                            }} >Log In</button>
-                            <button onClick={() => navigate("/")} style={{
-                                width: "150px", padding: "10px",
-                                border: "1px solid #1877F2", borderRadius: "10px", fontSize: "1.1rem", fontWeight: "bolder", cursor: "pointer",
-                                backgroundColor: "transparent", color: "#1877F2"
-                            }}>Cancel</button>
+                            <button type="submit"className={styles.LogInButton} >Log In</button>
+                            <button onClick={() => navigate("/")} className={styles.CannelButton}>Cancel</button>
 
                         </div>
 
@@ -152,7 +180,6 @@ function Login() {
 
                 </div>
 
-                <img src={votingImage} alt="" style={{ width : "400px"   , borderTopRightRadius : "20px" , borderBottomRightRadius : "20px"}} />
             </div>
 
         </>

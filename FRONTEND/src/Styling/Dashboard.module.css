@@ -1,8 +1,12 @@
 .navBar {
+  position: absolute;
   color: white;
+  background-color: transparent;
   display: flex;
-  padding: 10px;
+  width: 100vw;
   justify-content: space-between;
+  padding: 10px;
+
 }
 
 .navLeftSideItems {
@@ -12,14 +16,21 @@
   margin-left: 50px;
 }
 
+.navLeftSideItems span {
+  font-weight: bolder;
+  color : black;
+   transition: transform 200ms , color 200ms;
+}
+
 .navLeftSideItems span:hover {
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.531);
+  transform: scale(1.1);
+  color: #006efe
 }
 
 .navBar button {
   border: none;
-  background-color: #1877f2;
+  background-color: #422A70;
   color: white;
   font-weight: bold;
   border-radius: 10px;
@@ -28,7 +39,7 @@
 }
 
 .navBar button:hover {
-  background-color: #0672ff87;
+  background-color: #C10537;
 }
 
 .navRightSideItems {
@@ -42,16 +53,14 @@
   color: white;
   display: flex;
   flex-direction: column;
-  border-top: 1px solid rgba(255, 255, 255, 0.236);
-  gap : 20px;
+  gap: 20px;
   justify-content: space-around;
 }
 
 .bottomContainer #voteNow {
-
   width: 300px;
   animation: scaleEffect 1s infinite ease-in-out;
-  border-radius : 100%;
+  border-radius: 100%;
 }
 
 .eachPartyInfo {
@@ -59,30 +68,25 @@
   gap: 20px;
 }
 
-.VoteButton { 
+.VoteButton {
   width: 30%;
-  border : none;
-  background-color: #EC407A;
+  border: none;
+  background-color: #ec407a;
   border-radius: 20px;
-  color : white;
+  color: white;
   font-weight: bolder;
   transition: background-color 400ms;
-  padding : 10px 0px;
+  padding: 10px 0px;
 }
 
 .VoteButton:hover {
-   background-color: #40ecb3a7;
+  background-color: #40ecb3a7;
 }
-
-
-
 
 /* footer  */
 
-
 footer {
   position: relative;
-
 }
 
 footer .footerItems img {
@@ -99,7 +103,7 @@ footer .footerItems img {
 
 footer .footerItems {
   position: absolute;
-  padding : 10px;
+  padding: 10px;
   right: 0px;
   display: flex;
   width: auto;
@@ -109,13 +113,107 @@ footer .footerItems {
   margin-top: 100px;
 }
 
-
 footer .footerItems img:hover {
   transform: scale(1.1);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 
+
+.parties {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  cursor: pointer;
+  transition: transform 4s ease;
+}
+
+.parties #partyImage {
+  width: 100px;
+  border: 2px solid #1877f2;
+  height: 100px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: box-shadow 400ms;
+}
+
+.parties:hover #partyImage {
+  box-shadow: 3px 3px black;
+  animation: bounce 4s ease-in-out infinite;
+}
+
+.ItemsinFooter {
+  border: 1px solid red;
+}
+
+
+
+.party1 {
+  display: flex;
+  /* position: absolute; */
+  flex-direction: column;
+  background: linear-gradient(to right, #27AE60, #F2C94C, #F79C42, #FFFFFF);
+  gap: 10px;
+  color: black;
+  border-top-right-radius: 80px;
+  border-bottom-right-radius: 80px;
+  height: auto;
+  width: 600px;
+  padding: 20px;
+  transform: translateX(-90%);
+  transition: transform 600ms;
+}
+
+.party2 {
+  display: flex;
+  right : 0px;
+  top : 20%;
+  flex-direction: column;
+  background: linear-gradient(to right, #E74C3C, #FFFFFF, #2C3E50);
+
+  gap: 10px;
+  color: black;
+  border-top-left-radius: 60px;
+  border-bottom-left-radius: 60px;
+  height: auto;
+  width: 600px;
+  padding: 20px;
+  transform: translateX(90%);
+  transition: transform 600ms;
+}
+
+.party3 {
+  display: flex;
+  top : 40%;
+  flex-direction: column;
+  background: linear-gradient(to right, #F2C94C, #F79C42, #2C3E50);
+  gap: 10px;
+  color: black;
+  border-top-right-radius: 80px;
+  border-bottom-right-radius: 80px;
+  height: auto;
+  width: 600px;
+  padding: 20px;
+  transform: translateX(-90%);
+  transition: transform 600ms;
+}
+
+.party4 {
+  display: flex;
+  top : 60%;
+  right : 0px;
+  flex-direction: column;
+  background: linear-gradient(to right, #27AE60, #2C3E50, #F2C94C);
+  gap: 10px;
+  color: black;
+  border-top-left-radius: 60px;
+  border-bottom-left-radius: 60px;
+  height: auto;
+  width: 600px;
+  padding: 20px;
+  transform: translateX(90%);
+  transition: transform 600ms;
+}
 
 @keyframes bounce {
   0% {
@@ -135,31 +233,6 @@ footer .footerItems img:hover {
   }
 }
 
-.parties {
-  display: flex;
-  justify-content: center;
-  gap : 20px;
-  cursor: pointer;
-  transition: transform 4s ease;
-}
-
-.parties #partyImage { 
-  width: 100px;
-  border :2px solid #1877f2;
-  height: 100px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  transition: box-shadow 400ms;
-}
-
-.parties:hover  #partyImage{
-  box-shadow: 3px 3px black;
-  animation: bounce 4s ease-in-out infinite;
-}
-
-
-
-
 @keyframes scaleEffect {
   0% {
     transform: scale(0.7);
@@ -170,4 +243,21 @@ footer .footerItems img:hover {
   100% {
     transform: scale(0.7);
   }
+}
+
+.bannerBackground {
+   top : 0px;
+   z-index: -1;
+   background-image: url("../images//bannerTop.png");
+   height: 800px;
+   width: 100vw;
+   background-size: cover;
+   margin-bottom: 50px;
+   background-repeat: no-repeat;
+}
+
+
+
+hr {
+  color  :  #1877f2
 }

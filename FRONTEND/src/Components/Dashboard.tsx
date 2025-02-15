@@ -1,13 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import styles from "../Styling/Dashboard.module.css";
 import logo from "../images/logo.jpeg";
-import voteNow from "../images/vote-now.png";
-import election from "../images/election.jpg";
+// import voteNow from "../images/vote-now.png";
+import p1 from "../images/e1.jpg";
+import p2 from "../images/e2.jpg";
+import p3 from "../images/e3.jpg";
+import p4 from "../images/e4.jpg";
+import FooterImage from "../images/footerImage.jpg";
 import { Images } from "../script/GetImages";
-import { useEffect, useState } from "react";
+import { ScrollToTheTop } from "../script/GetData";
+import { useEffect, useRef, useState } from "react";
+import Footer from "./Footer";
 
-const maxTime = 1739531889756 + 5 * 60 * 60 * 1000;
-
+const maxTime = 1799651889756 + 5 * 60 * 60 * 1000;
 let intervalId: any;
 
 function Dashboard() {
@@ -15,8 +20,16 @@ function Dashboard() {
   const [leftHours, setLeftHours] = useState<number>(0);
   const [leftMinutes, setLeftMinutes] = useState<number>(0);
   const [leftSeconds, setLeftSeconds] = useState<number>(0);
+  const [scrollAmount, setScrollAmount] = useState<number>(0);
+
+  const partyRef1 = useRef<HTMLDivElement>(null);
+  const partyRef2 = useRef<HTMLDivElement>(null);
+  const partyRef3 = useRef<HTMLDivElement>(null);
+  const partyRef4 = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    ScrollToTheTop("instant");
+
     intervalId = setInterval(() => {
       Timer();
     }, 1000);
@@ -25,6 +38,42 @@ function Dashboard() {
       clearInterval(intervalId);
     };
   }, []);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleOnWindowScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleOnWindowScroll);
+    };
+  }, []);
+
+  function handleOnWindowScroll() {
+    if (window.scrollY > 454) {
+      if (partyRef1.current) {
+        partyRef1.current.style.transform = "translateX(0%)";
+      }
+    }
+
+    if (window.scrollY > 1000) {
+      if (partyRef2.current) {
+        partyRef2.current.style.transform = "translateX(0%)";
+      }
+    }
+
+    if (window.scrollY > 1400) {
+      if (partyRef3.current) {
+        partyRef3.current.style.transform = "translateX(0%)";
+      }
+    }
+
+    if (window.scrollY > 1900) {
+      if (partyRef4.current) {
+        partyRef4.current.style.transform = "translateX(0%)";
+      }
+    }
+
+    setScrollAmount(Math.floor(window.scrollY));
+  }
 
   function Timer() {
     const currentTime = Date.now();
@@ -54,13 +103,12 @@ function Dashboard() {
   return (
     <>
       {/* nav bar */}
-
       <nav className={styles.navBar}>
         <div className={styles.navLeftSideItems}>
-          <img
+          <img onClick={() => navigate("/")}
             src={logo}
             alt=""
-            style={{ width: "70px", borderRadius: "50%" }}
+            style={{ width: "70px", borderRadius: "50%" ,cursor :"pointer" }}
           />
           <span>Parties List</span>
           <span>About</span>
@@ -74,12 +122,14 @@ function Dashboard() {
           <button onClick={() => navigate("/login")}>Login</button>
         </div>
       </nav>
-
-      {/* bottom items */}
+      <p style={{ position: "fixed", color: "red", zIndex: "10" }}>
+        {scrollAmount}
+      </p>
+      <div className={styles.bannerBackground}></div>
 
       <div className={styles.bottomContainer}>
         {/* vote now image */}
-        <div
+        {/* <div
           style={{
             fontWeight: "bolder",
             marginLeft: "20px",
@@ -96,77 +146,145 @@ function Dashboard() {
             {formatTime(leftHours)} hr {formatTime(leftMinutes)} min{" "}
             {formatTime(leftSeconds)} sec
           </span>
-        </div>
+        </div> */}
 
         {/* parties info */}
+
         <div
           style={{
+            position: "relative",
             display: "flex",
             flexDirection: "column",
             gap: "40px",
-            marginTop: "20px",
+            width: "100%",
+            padding: "10px 0px",
+            height: "auto",
           }}
         >
-          {Images.map((image, index) => (
-            <div key={index} className={styles.parties}  >
-              <img src={image.src} alt="" id={styles.partyImage} />
-              <div
-                style={{
-                  display: "flex",
-                    alignItems : "center",
-                  flexDirection: "column",
-                  gap: "20px",
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: "1.5rem",
-                    fontWeight: "bolder",
-                    color: "#1877f2",
-                  }}
-                >
-                  {image.partyName}
-                </span>
-                <span style={{ fontStyle :"italic" }} >{image.about}</span>
-                <span style={{ borderTop : "1px solid white" , padding : "10px 20px", borderBottom :"1px solid white" }} >
-                  <span style={{ color: "green"  ,  fontWeight : "bolder"  }}>Total Votes : </span>
-                  <span style={{ color: "green" , fontSize : "1.2rem"  }}>{image.votingCount}</span>
-                </span>
-                <button className={styles.VoteButton} >VOTE NOW</button>
-              </div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div ref={partyRef1} className={styles.party1}>
+              <img
+                src={Images[0].src}
+                alt=""
+                style={{ width: "100px" ,  borderRadius: "50%" }}
+              />
+              <span>{Images[0].about}</span>
+              <span>Total Votes : {Images[0].votingCount}</span>
             </div>
-          ))}
+            <img
+              src={p1}
+              alt=""
+              style={{
+                width: "400px",
+                height : "400px",
+                flexShrink :"0",
+                objectFit: "cover",
+                borderRadius: "50%",
+              }}
+            />
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <img
+              src={p2}
+              alt=""
+              style={{
+                width: "400px",
+                height : "400px",
+                flexShrink :"0",
+                objectFit: "cover",
+                borderRadius: "50%",
+              }}
+            />
+
+            <div ref={partyRef2} className={styles.party2}>
+              <img
+                src={Images[1].src}
+                alt=""
+                style={{ width: "100px", borderRadius: "50%" }}
+              />
+              <span>{Images[1].about}</span>
+              <span>Total Votes : {Images[1].votingCount}</span>
+            </div>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <div ref={partyRef3} className={styles.party3}>
+              <img
+                src={Images[2].src}
+                alt=""
+                style={{ width: "100px", borderRadius: "50%" }}
+              />
+              <span>{Images[2].about}</span>
+              <span>Total Votes : {Images[2].votingCount}</span>
+            </div>
+
+            <img
+              src={p3}
+              alt=""
+              style={{
+                width: "400px",
+                height : "400px",
+                flexShrink :"0",
+                objectFit: "cover",
+                borderRadius: "50%",
+              }}
+            />
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <img
+              src={p4}
+              alt=""
+              style={{
+                width: "400px",
+                height : "400px",
+                flexShrink :"0",
+                objectFit: "cover",
+                borderRadius: "50%",
+              }}
+            />
+
+            <div ref={partyRef4} className={styles.party4}>
+              <img
+                src={Images[3].src}
+                alt=""
+                style={{ width: "100px", borderRadius: "50%" }}
+              />
+              <span>{Images[3].about}</span>
+              <span>Total Votes : {Images[3].votingCount}</span>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* election image */}
-
-      <div style={{ width: "100vw", height: "350px", marginTop: "20px" }}>
+      {/* <div style={{ width: "100vw", height: "350px", marginTop: "20px" }}>
         <img
           src={election}
           alt=""
           style={{ width: "100%", height: "inherit" }}
         />
-      </div>
+      </div> */}
+
+      <img
+        src={FooterImage}
+        alt=""
+        style={{
+          width: "100vw",
+          objectFit: "contain",
+          objectPosition: "center",
+          marginTop: "20px",
+
+          marginBottom: "20px",
+        }}
+      />
 
       {/* footer */}
 
-      <footer>
-        <div className={styles.footerItems}>
-          <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWO5X5wTypXs_GdWc2lTJTvtVv-mjfXh8hPg&s"
-            alt="instagram "
-          />
-          <img
-            src="https://e7.pngegg.com/pngimages/708/311/png-clipart-twitter-twitter-thumbnail.png"
-            alt="Twitter"
-          />
-          <img
-            src="https://images.vexels.com/media/users/3/137253/isolated/preview/90dd9f12fdd1eefb8c8976903944c026-facebook-icon-logo.png"
-            alt="facebook"
-          />
-        </div>
-      </footer>
+      <div style={{ height: "auto" }}>
+        <Footer />
+      </div>
     </>
   );
 }
