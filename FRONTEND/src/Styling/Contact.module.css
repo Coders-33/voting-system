@@ -1,0 +1,73 @@
+.container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+}
+
+.contactInfo {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.contactInfo p {
+  margin: 5px 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputField,
+.textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.button {
+  width: 100%;
+  padding: 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease;
+}
+
+.button:hover {
+  background: #0056b3;
+}
+
+.socialLinks {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.socialLinks a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #007bff;
+}
+
+.socialLinks a:hover {
+  text-decoration: underline;
+}

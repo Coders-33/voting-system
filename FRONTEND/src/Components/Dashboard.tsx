@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import styles from "../Styling/Dashboard.module.css";
-import logo from "../images/logo.jpeg";
 // import voteNow from "../images/vote-now.png";
 import p1 from "../images/e1.jpg";
 import p2 from "../images/e2.jpg";
@@ -11,6 +10,7 @@ import { Images } from "../script/GetImages";
 import { ScrollToTheTop } from "../script/GetData";
 import { useEffect, useRef, useState } from "react";
 import Footer from "./Footer";
+import Navbar from "../Small-components/Navbar";
 
 const maxTime = 1799651889756 + 5 * 60 * 60 * 1000;
 let intervalId: any;
@@ -103,25 +103,9 @@ function Dashboard() {
   return (
     <>
       {/* nav bar */}
-      <nav className={styles.navBar}>
-        <div className={styles.navLeftSideItems}>
-          <img onClick={() => navigate("/")}
-            src={logo}
-            alt=""
-            style={{ width: "70px", borderRadius: "50%" ,cursor :"pointer" }}
-          />
-          <span>Parties List</span>
-          <span>About</span>
-          <span>Live Result</span>
-          <span>Contact</span>
-          <span>Help</span>
-        </div>
 
-        <div className={styles.navRightSideItems}>
-          <button>Vote now</button>
-          <button onClick={() => navigate("/login")}>Login</button>
-        </div>
-      </nav>
+      <Navbar />
+
       <p style={{ position: "fixed", color: "red", zIndex: "10" }}>
         {scrollAmount}
       </p>
@@ -166,7 +150,7 @@ function Dashboard() {
               <img
                 src={Images[0].src}
                 alt=""
-                style={{ width: "100px" ,  borderRadius: "50%" }}
+                style={{ width: "100px", borderRadius: "50%" }}
               />
               <span>{Images[0].about}</span>
               <span>Total Votes : {Images[0].votingCount}</span>
@@ -176,8 +160,8 @@ function Dashboard() {
               alt=""
               style={{
                 width: "400px",
-                height : "400px",
-                flexShrink :"0",
+                height: "400px",
+                flexShrink: "0",
                 objectFit: "cover",
                 borderRadius: "50%",
               }}
@@ -190,8 +174,8 @@ function Dashboard() {
               alt=""
               style={{
                 width: "400px",
-                height : "400px",
-                flexShrink :"0",
+                height: "400px",
+                flexShrink: "0",
                 objectFit: "cover",
                 borderRadius: "50%",
               }}
@@ -224,8 +208,8 @@ function Dashboard() {
               alt=""
               style={{
                 width: "400px",
-                height : "400px",
-                flexShrink :"0",
+                height: "400px",
+                flexShrink: "0",
                 objectFit: "cover",
                 borderRadius: "50%",
               }}
@@ -238,8 +222,8 @@ function Dashboard() {
               alt=""
               style={{
                 width: "400px",
-                height : "400px",
-                flexShrink :"0",
+                height: "400px",
+                flexShrink: "0",
                 objectFit: "cover",
                 borderRadius: "50%",
               }}

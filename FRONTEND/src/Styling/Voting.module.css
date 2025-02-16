@@ -1,0 +1,93 @@
+.votingContainer {
+  position: relative;
+  top: 100px;
+  width: 100%;
+  overflow-y: auto;
+  background-color: white;
+  height: 1300px;
+}
+
+.votingBoxItems {
+  height: 100%;
+  padding: 0px 20px;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+}
+
+.votingBoxItems #CandidatePost {
+  font-family: sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bolder;
+}
+
+.eachSectionCandidate {
+  display: grid;
+  gap: 10px;
+  grid-template-rows: repeat(1, 1fr);
+}
+
+.eachSectionCandidate .eachInfoSection {
+  padding: 10px;
+  color: white;
+  display: flex;
+  gap: 30px;
+  border-radius: 10px;
+  background-color: rgb(34, 34, 34);
+}
+
+.hiddenRadio {
+  display: none;
+}
+
+.customRadioBtn {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #6c757d;
+  border-radius: 50%;
+  position: relative;
+  display: inline-block;
+  background-color: #fff;
+  transition: all 0.3s ease;
+}
+
+.hiddenRadio:checked + .customRadioBtn {
+  border-color: #00c2fd;
+  background-color: #1294eb;
+}
+
+.hiddenRadio:checked + .customRadioBtn::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.eachInfoSection:hover {
+    cursor: pointer;
+}
+
+
+.SubmitVote {
+     width : 300px;
+     padding : 5px;
+     border :none;
+     color : white;
+     font-weight: bolder;
+     background-color: #1877F2;
+     border-radius: 20px;
+     font-size: 1.5rem;
+     transition: transform 200ms , background-color 200ms;
+
+}
+
+.SubmitVote:hover {
+    transform: scale(1.02);
+     background-color: #2b6abd;
+}

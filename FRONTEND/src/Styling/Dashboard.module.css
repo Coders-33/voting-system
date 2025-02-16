@@ -6,7 +6,6 @@
   width: 100vw;
   justify-content: space-between;
   padding: 10px;
-
 }
 
 .navLeftSideItems {
@@ -18,19 +17,19 @@
 
 .navLeftSideItems span {
   font-weight: bolder;
-  color : black;
-   transition: transform 200ms , color 200ms;
+  color: white;
+  transition: transform 200ms, color 200ms;
 }
 
 .navLeftSideItems span:hover {
   cursor: pointer;
   transform: scale(1.1);
-  color: #006efe
+  color: #006efe;
 }
 
 .navBar button {
   border: none;
-  background-color: #422A70;
+  background-color: #422a70;
   color: white;
   font-weight: bold;
   border-radius: 10px;
@@ -39,7 +38,7 @@
 }
 
 .navBar button:hover {
-  background-color: #C10537;
+  background-color: #c10537;
 }
 
 .navRightSideItems {
@@ -118,8 +117,6 @@ footer .footerItems img:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-
-
 .parties {
   display: flex;
   justify-content: center;
@@ -146,13 +143,11 @@ footer .footerItems img:hover {
   border: 1px solid red;
 }
 
-
-
 .party1 {
   display: flex;
   /* position: absolute; */
   flex-direction: column;
-  background: linear-gradient(to right, #27AE60, #F2C94C, #F79C42, #FFFFFF);
+  background: linear-gradient(to right, #27ae60, #f2c94c, #f79c42, #ffffff);
   gap: 10px;
   color: black;
   border-top-right-radius: 80px;
@@ -166,10 +161,10 @@ footer .footerItems img:hover {
 
 .party2 {
   display: flex;
-  right : 0px;
-  top : 20%;
+  right: 0px;
+  top: 20%;
   flex-direction: column;
-  background: linear-gradient(to right, #E74C3C, #FFFFFF, #2C3E50);
+  background: linear-gradient(to right, #e74c3c, #ffffff, #2c3e50);
 
   gap: 10px;
   color: black;
@@ -184,9 +179,9 @@ footer .footerItems img:hover {
 
 .party3 {
   display: flex;
-  top : 40%;
+  top: 40%;
   flex-direction: column;
-  background: linear-gradient(to right, #F2C94C, #F79C42, #2C3E50);
+  background: linear-gradient(to right, #f2c94c, #f79c42, #2c3e50);
   gap: 10px;
   color: black;
   border-top-right-radius: 80px;
@@ -200,10 +195,10 @@ footer .footerItems img:hover {
 
 .party4 {
   display: flex;
-  top : 60%;
-  right : 0px;
+  top: 60%;
+  right: 0px;
   flex-direction: column;
-  background: linear-gradient(to right, #27AE60, #2C3E50, #F2C94C);
+  background: linear-gradient(to right, #27ae60, #2c3e50, #f2c94c);
   gap: 10px;
   color: black;
   border-top-left-radius: 60px;
@@ -246,18 +241,54 @@ footer .footerItems img:hover {
 }
 
 .bannerBackground {
-   top : 0px;
-   z-index: -1;
-   background-image: url("../images//bannerTop.png");
-   height: 800px;
-   width: 100vw;
-   background-size: cover;
-   margin-bottom: 50px;
-   background-repeat: no-repeat;
+  top: 0px;
+  z-index: -1;
+  background-image: url("../images//bannerTop.png");
+  height: 800px;
+  width: 100vw;
+  background-size: cover;
+  margin-bottom: 50px;
+  background-repeat: no-repeat;
+}
+
+#partiesList {
+  display: flex;
+  padding : 5px;
+  flex-direction: column;
+  position: relative;
+  margin-top: 15px;
+}
+
+#partiesListBox {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap : 10px;
+  top: 32px;
+  z-index: 10;
+  flex-wrap: nowrap;
+  border-radius: 10px;
+  background-color: rgb(33, 33, 33);
+  color: white;
+  position: absolute;
+  height: auto;
+  width: 430px;
+}
+
+#partiesListBox p {
+  flex-shrink: 0;
+  padding : 5px;
+  border-radius: 10px; 
+  transition: transform 200ms , background-color 200ms; 
+}
+
+#partiesListBox p:hover {
+  cursor: pointer;
+  transform: scale(1.02);
+  background-color: #6868694f;
 }
 
 
-
 hr {
-  color  :  #1877f2
+  color: #04fb0c;
 }

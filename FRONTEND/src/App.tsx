@@ -1,6 +1,9 @@
 import { BrowserRouter , Routes , Route} from "react-router-dom"
 import Login from "./Components/Login"
-import Dashboard from "./Components/DashBoard"
+import Dashboard from "./Components/Dashboard"
+import Contact from "./Components/Contact"
+import Help from "./Components/Help"
+import Voting from "./Components/Voting"
 
 
 function App() {
@@ -10,9 +13,11 @@ function App() {
    
     <Routes>
     <Route path="/" element={<Dashboard/>} />
-     
      <Route path="/login" element={<Login/>} />
-
+     <Route path="/contact" element={<Contact/>} />
+     <Route path="/help" element={<Help/>} />
+     <Route path="/voting/:id" element={<Voting/>} />
+    
     </Routes>
    </BrowserRouter>
 
