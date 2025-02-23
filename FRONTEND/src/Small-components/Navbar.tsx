@@ -56,7 +56,7 @@ function Navbar() {
             </div>
           </p>
           <span>About</span>
-          <span>Live Result</span>
+          <span onClick={() => navigate("/live-result")} >Live Result</span>
           <span onClick={() => navigate("/contact")}>Contact</span>
           <span onClick={() => navigate("/help")}>Help</span>
         </div>

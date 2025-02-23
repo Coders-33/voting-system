@@ -106,9 +106,6 @@ function Dashboard() {
 
       <Navbar />
 
-      <p style={{ position: "fixed", color: "red", zIndex: "10" }}>
-        {scrollAmount}
-      </p>
       <div className={styles.bannerBackground}></div>
 
       <div className={styles.bottomContainer}>
