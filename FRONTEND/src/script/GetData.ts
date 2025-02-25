@@ -1,3 +1,5 @@
+export const BACKEND_URL  = "http://192.168.1.20:5000";
+
 export function ScrollToTheTop(behaviourType: any) {
   window.scrollTo({
     top: 0,

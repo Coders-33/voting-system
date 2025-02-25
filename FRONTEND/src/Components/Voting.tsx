@@ -10,6 +10,7 @@ import {
 import { useState } from "react";
 
 function Voting() {
+  
   const [selectedPresident, setSelectedPresident] = useState<string>("");
   const [selectedVicePresident, setVicePresident] = useState<string>("");
   const [selectedGeneralSect, setGeneralSect] = useState<string>("");

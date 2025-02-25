@@ -9,7 +9,7 @@ function Navbar() {
   const [partyListBox, setPartyListBox] = useState<boolean>(false);
 
   return (
-    <>
+    
       <nav className={styles.navBar}>
         <div className={styles.navLeftSideItems}>
           <img
@@ -18,7 +18,7 @@ function Navbar() {
             alt=""
             style={{ width: "70px", borderRadius: "50%", cursor: "pointer" }}
           />
-          <p id={styles.partiesList}>
+          <div id={styles.partiesList}>
             <span
               onMouseOver={() => setPartyListBox(true)}
               onMouseLeave={() => setPartyListBox(false)}
@@ -54,7 +54,7 @@ function Navbar() {
                 KCSU (2121) {"=> Khalsa College Student Union"}
               </p>
             </div>
-          </p>
+          </div>
           <span>About</span>
           <span onClick={() => navigate("/live-result")} >Live Result</span>
           <span onClick={() => navigate("/contact")}>Contact</span>
@@ -68,7 +68,7 @@ function Navbar() {
           <button onClick={() => navigate("/login")}>Login</button>
         </div>
       </nav>
-    </>
+ 
   );
 }
 

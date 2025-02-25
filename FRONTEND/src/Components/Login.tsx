@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "../Styling/Sign.module.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import votingImage from "../images/digital-voting.png"
 import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../script/GetData";
 
 
 function Login() {
@@ -110,11 +111,36 @@ function Login() {
     }
 
     function handleForgetPassword() {
+ 
+        navigate("/forget-password");
 
     }
 
-    function handleLogIn(e: React.FormEvent<HTMLFormElement>) {
+    async function handleLogIn(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+
+        const formData = new FormData();
+
+        formData.append("studentId" , studentIdValue);
+        formData.append("email" , emailValue);
+        formData.append("password" , passValue);
+
+
+        const response = await fetch(`${BACKEND_URL}/accounts/login` , {
+            method : "POST",
+            body : formData
+        });
+
+       const result = await response.json();
+       if(response.ok) { 
+         console.log(result);
+         navigate("/");
+       }         
+       
+       if(!response.ok) {
+         console.log(result);   
+       }
+
     }
 
 
@@ -142,21 +168,24 @@ function Login() {
 
                         <div id={styles.inputDiv} >
                             <span ref={studentIdRef} id={styles.spanLabel}>Student Id*</span>
-                            <input ref={studentInputRef} id={styles.inputField}
-                                value={studentIdValue} onChange={(e) => setStudentId(e.target.value)}
+                            <input ref={studentInputRef} id={styles.inputField} required
+                                value={studentIdValue} onChange={function(e : React.ChangeEvent<HTMLInputElement>) {
+                                     if(isNaN(Number(e.target.value))) return;
+                                     setStudentId(e.target.value);
+                                }}
                                 type="text" />
                         </div>
                         <div id={styles.inputDiv} >
                             <span ref={emailRef} id={styles.spanLabel}>Email*</span>
-                            <input ref={emailInputRef} id={styles.inputField}
+                            <input ref={emailInputRef} id={styles.inputField} required
                                 value={emailValue} onChange={(e) => setEmailValue(e.target.value)}
                                 type="text" />
                         </div>
 
 
                         <div id={styles.inputDiv} >
-                            <span ref={passRef} id={styles.spanLabel}>Password*</span>
-                            <input ref={passInputRef} id={styles.inputField}
+                            <span onClick={handleForgetPassword} ref={passRef} id={styles.spanLabel}>Password*</span>
+                            <input ref={passInputRef} id={styles.inputField}  required
                                 value={passValue} onChange={(e) => setPassValue(e.target.value)}
                                 type="text" />
                         </div>
