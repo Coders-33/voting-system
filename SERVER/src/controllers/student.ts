@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import studentDoc from "../models/studentDoc";
 import crypto from "crypto";
 import { transporter } from "../server";
+import { GenerateToken } from "../authentication/authenticate";
 
 type CandidateType = {
     _id: string,
@@ -62,7 +63,19 @@ export async function handleStudentLogin(req: Request, res: Response): Promise<v
             return;
           }
 
-          res.status(200).json({ message : "Logged In Successfuly"  });
+          // authentication 
+           
+           const tokenData = {
+               email : candiate.email
+           }
+
+          const token = GenerateToken(tokenData);
+
+          const  loginData = { 
+            token : token,
+            email : candiate.email
+          }
+          res.status(200).json({ message : "Logged In Successfuly" , loginData });
  
      }
      catch(error) {

@@ -2,15 +2,19 @@ import React, { useState } from "react";
 import styles from "../Styling/Dashboard.module.css";
 import logo from "../images/logo.jpeg";
 import { useNavigate } from "react-router-dom";
+import { ACTIONS, useAuthContext } from "../Context/UserContext";
 
 function Navbar() {
   const navigate = useNavigate();
 
   const [partyListBox, setPartyListBox] = useState<boolean>(false);
 
+ const { dispatch} = useAuthContext();
+
   return (
-    
+     
       <nav className={styles.navBar}>
+        <button onClick={() => dispatch({ type : ACTIONS.REMOVE_USER })} >logout</button>
         <div className={styles.navLeftSideItems}>
           <img
             onClick={() => navigate("/")}

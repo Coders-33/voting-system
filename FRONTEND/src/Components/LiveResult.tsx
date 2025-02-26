@@ -71,7 +71,7 @@ const LiveResult: React.FC = () => {
        
         <div className={styles.allPartiesVotes}>
          {parties.map((each , index) =>  (
-          <div style={{display :"flex" , gap :"10px" , alignItems :"center" }} >
+          <div key={index}  style={{display :"flex" , gap :"10px" , alignItems :"center" }} >
               <span>{each} : </span>
               <span style={ { color: "red" } } >{votes[index]}</span>
           </div>

@@ -10,6 +10,7 @@ dotenv.config();
 
 // Routes
 import StudentRoute from "./routes/student";
+import { ValidateToken } from "./authentication/authenticate";
 
 
 export const transporter = nodemailer.createTransport({
@@ -63,7 +64,7 @@ app.use("/socket.io", (req: Request, res: Response, next: Function) => {
 })
 
 
-
+app.post("/validate-token" , ValidateToken);
 app.use("/accounts" , StudentRoute);
 
 

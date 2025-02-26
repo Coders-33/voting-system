@@ -4,11 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import votingImage from "../images/digital-voting.png"
 import { useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../script/GetData";
+import { useAuthContext , ACTIONS } from "../Context/UserContext";
 
 
 function Login() {
 
     const navigate = useNavigate();
+
+    const { dispatch } = useAuthContext();
 
     const emailInputRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLSpanElement>(null);
@@ -133,7 +136,13 @@ function Login() {
 
        const result = await response.json();
        if(response.ok) { 
-         console.log(result);
+       
+        const userToken = result.loginData;
+        if(userToken) {
+            dispatch({ type : ACTIONS.SET_USER , payload : userToken });
+            localStorage.setItem("user-token" , JSON.stringify(userToken));
+        }
+         
          navigate("/");
        }         
        
