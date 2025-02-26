@@ -1,0 +1,23 @@
+POST http://0.0.0.0:5000/accounts/login
+Content-Type:  application/json
+
+{
+     "studentId" : 32923,
+     "email" : "varunjoshi1590@gmail.com",
+     "password"  : "va"
+}
+
+
+
+####
+
+
+POST http://0.0.0.0:5000/accounts/signup
+Content-Type:  application/json
+
+{
+      "studentName" : "rahul diman",
+     "studentId" : 10239,
+     "email" : "varunjoshi1590@gmail.com",
+     "password"  : "341"
+}
