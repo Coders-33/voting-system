@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "../Styling/Sign.module.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import votingImage from "../images/digital-voting.png"
 import { useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../script/GetData";
 import { useAuthContext , ACTIONS } from "../Context/UserContext";
@@ -11,7 +9,7 @@ function Login() {
 
     const navigate = useNavigate();
 
-    const { dispatch } = useAuthContext();
+    const { dispatch , user } = useAuthContext();
 
     const emailInputRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLSpanElement>(null);
@@ -131,6 +129,9 @@ function Login() {
 
         const response = await fetch(`${BACKEND_URL}/accounts/login` , {
             method : "POST",
+            headers : {
+              "Authorization" : `Bearer ${user?.token}`   
+            },
             body : formData
         });
 

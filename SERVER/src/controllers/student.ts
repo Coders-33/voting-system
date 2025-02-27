@@ -210,7 +210,7 @@ export async function handleVerificationOfOTP(req: Request, res: Response): Prom
             keyId = crypto
                 .createHmac("sha256", process.env.OTP_KEY)
                 .update(id)
-                .digest("base64");
+                .digest("hex");
         }
 
 

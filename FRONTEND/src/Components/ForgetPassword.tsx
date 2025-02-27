@@ -100,7 +100,7 @@ const ForgetPassword = () => {
 
             if (response.ok) {
                 setMessage(result.message || "Verification successful!");
-
+                  console.log("ids -> " , result);
                 setTimeout(() => {
                     navigate(`/rs/${candidateId}/${result?.keyId}`);
                     return;
@@ -152,7 +152,7 @@ const ForgetPassword = () => {
                     <div className={styles.inputContainer}>
                         <input
                             type={otpSendValidation ? "text" : "email"}
-                            placeholder="Enter your email"
+                            placeholder={otpSendValidation ? "Enter OTP" : "Enter your email" }
                             value={inputText}
                             onChange={inputTextSetting}
                             className={styles.input}

@@ -1,4 +1,4 @@
-export const BACKEND_URL  = "http://192.168.1.20:5000";
+export const BACKEND_URL  = "http://192.168.1.6:5000";
 
 export function ScrollToTheTop(behaviourType: any) {
   window.scrollTo({
@@ -128,6 +128,12 @@ export const President = [
   srcImage : "", 
 },
 
+{ 
+  Name : 'Bhupinder',
+  Position : 4,
+ srcImage : "",
+}
+
 
 ]
 
@@ -151,6 +157,12 @@ export const VicePresident = [
     Position : 3,
     srcImage : "", 
   },
+
+  { 
+    Name : 'Sahil',
+    Position : 4,
+   srcImage : "",
+  }
   
   
 ]
@@ -175,6 +187,13 @@ export const GeneralSecretary = [
     Position : 3,
     srcImage : "", 
   },
+
+
+  { 
+    Name : 'Priyanshu',
+    Position : 4,
+   srcImage : "",
+  }
   
   
 ]
@@ -200,5 +219,10 @@ export const JointSecretary = [
     srcImage : "", 
   },
   
+  { 
+    Name : 'Gurpesh',
+    Position : 4,
+   srcImage : "",
+  }
   
 ]

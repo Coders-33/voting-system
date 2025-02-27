@@ -24,3 +24,16 @@
 hr { 
     color : rgb(18, 250, 1);
 }
+
+
+.allPartiesVotes { 
+    font-size: 2rem;
+    padding : 0px 20px;
+    height: 300px;
+    width: 350px;
+    border-radius: 20px;
+    font-weight: bolder;
+    display: flex;
+    background-color: rgb(199, 199, 199);
+    justify-content: center;
+}

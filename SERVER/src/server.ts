@@ -5,23 +5,23 @@ import { Server } from "socket.io";
 import bodyParser from "body-parser";
 import http from "http";
 import nodemailer from "nodemailer";
-import  { connect } from "mongoose";
+import { connect } from "mongoose";
 dotenv.config();
 
 // Routes
 import StudentRoute from "./routes/student";
-import { ValidateToken } from "./authentication/authenticate";
-
+import { Authentication, ValidateToken } from "./authentication/authenticate";
+import VotingRoute from "./routes/voting";
 
 export const transporter = nodemailer.createTransport({
-     
-    service : "gmail",
-    
-    auth :  { 
-        user : process.env.EMAIL_USER,
-        pass : process.env.EMAIL_PASSWORD
+
+    service: "gmail",
+
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD
     },
-    
+
 });
 
 
@@ -64,8 +64,11 @@ app.use("/socket.io", (req: Request, res: Response, next: Function) => {
 })
 
 
-app.post("/validate-token" , ValidateToken);
-app.use("/accounts" , StudentRoute);
+
+
+app.post("/validate-token", ValidateToken);
+app.use("/accounts",  StudentRoute);
+app.use("/votes", Authentication, VotingRoute);
 
 
 

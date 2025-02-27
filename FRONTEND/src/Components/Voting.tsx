@@ -1,27 +1,75 @@
 import Navbar from "../Small-components/Navbar";
 import styles from "../Styling/Voting.module.css";
 import Footer from "./Footer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faL, faXmark } from "@fortawesome/free-solid-svg-icons";
 import {
   President,
   VicePresident,
   GeneralSecretary,
   JointSecretary,
+  BACKEND_URL,
 } from "../script/GetData";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../Context/UserContext";
 
 function Voting() {
-  
+
+   const { user } = useAuthContext(); 
+  const navigate = useNavigate();
+
   const [selectedPresident, setSelectedPresident] = useState<string>("");
   const [selectedVicePresident, setVicePresident] = useState<string>("");
   const [selectedGeneralSect, setGeneralSect] = useState<string>("");
   const [selectedJoinSect, setJoinSect] = useState<string>("");
 
-  const [error ,setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+  const [voteError, setVoteError] = useState<string | null>("");
+  const [verficationError, setVerificationError] = useState<string | null>(null);
+  const [verficationMessage, setVerificationMessage] = useState<string | null>(null);
 
   const [presidentCode, setPresidentCode] = useState<number | null>(null);
   const [vicePresidentCode, setVicePresidentCode] = useState<number | null>(null);
   const [generalSecetCode, setGeneralSecetCode] = useState<number | null>(null);
   const [jointSecetCode, setJointSecetCode] = useState<number | null>(null);
+
+  const [studentId, setStudentId] = useState<string>("");
+  const [emailId, setEmailId] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+
+
+  const [enableVerification, setEnableVerification] = useState<boolean>(false);
+  const [voteDoneStatus, setVoteDoneStatus] = useState<boolean>(false);
+  const [voteResult, setVoteResult] = useState<boolean>(false);
+  const [enableVote, setEnableVote] = useState<boolean>(false);
+  const [voteConfirmation, setVoteConfirmation] = useState<boolean>(false);
+
+  const [DATA_studentid , setDataStudentId] = useState<number | null>(null);
+
+  useEffect(() => {
+
+    function clearUi() {
+
+      const timeoutId = setTimeout(() => {
+        setError(null);
+        setMessage(null);
+        setVerificationError(null);
+        setVerificationMessage(null);
+      }, 1500);
+
+
+
+      return () => {
+        clearTimeout(timeoutId)
+      }
+    }
+
+    clearUi();
+
+  }, [error, message, verficationError, verficationMessage])
 
   function SelectPresidentAndCode(PresName: string, code: number) {
     setSelectedPresident(PresName);
@@ -43,22 +91,242 @@ function Voting() {
     setJointSecetCode(code);
   }
 
- function HandleOnSubmitVote() {
-    
-    if(presidentCode  && vicePresidentCode &&
-       generalSecetCode && jointSecetCode 
-     ) {
-         setError("Submitted")
-     }
-    else { 
-        setError("Select Each Member of Post");
-    }
-    
+  async function HandleOnSubmitVote() {
 
- }
+
+    if (!presidentCode || !vicePresidentCode ||
+      !generalSecetCode || !jointSecetCode
+    ) {
+      setError("Select Candidate from each post");
+      return;
+    }
+    window.scrollTo({
+      left: 0,
+      top: 0,
+      behavior: "smooth"
+    })
+    // document.body.style.overflowY = "hidden";
+    setEnableVerification(true);
+  }
+
+  async function verifyStudentLogin(event: React.ChangeEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (studentId == "" || emailId == "" || password == "") {
+      setError("Fields can't be empty");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("studentId", studentId);
+    formData.append("email", emailId);
+    formData.append("password", password);
+
+    try {
+
+      const response = await fetch(`${BACKEND_URL}/accounts/login`, {
+        method: "POST",
+        body: formData
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setVerificationMessage("Verified");
+        handleResetValues();
+        setTimeout(() => {
+          setEnableVerification(false);
+          setEnableVote(true);
+        }, 1500);
+        return;
+      }
+      if (!response.ok) {
+        setVerificationError(result.error);
+      }
+    }
+    catch (error: any) {
+      console.log("error", error);
+      setVerificationError(error);
+    }
+
+  }
+
+  function handleResetValues() {
+    setDataStudentId(Number(studentId));
+    setStudentId("");
+    setEmailId("");
+    setPassword("");
+  }
+
+  async function addVote() {
+
+    const panelcode = `${presidentCode}${vicePresidentCode}${generalSecetCode}${jointSecetCode}`;
+
+    const votingData = {
+      studentId: DATA_studentid,
+      panelCode: panelcode
+    }
+
+    try {
+
+      const response = await fetch(`${BACKEND_URL}/votes/add-new-vote`, {
+        method: "POST",
+        headers: {
+          "Authorization" : `Bearer ${user?.token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(votingData)
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        document.body.style.overflowY= "auto";
+        setVoteResult(true);
+        setVoteConfirmation(true);
+        setVoteDoneStatus(true);
+        console.log(result.message);
+        setTimeout(() => {
+          navigate("/")
+        }, 2000);
+
+      }
+      if (!response.ok) {
+        document.body.style.overflowY = "auto";
+        setVoteConfirmation(true);
+        setVoteResult(true);
+        setVoteError(result.error);
+
+        setTimeout(() => {
+          navigate("/")
+        }, 2000);
+      }
+
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
+
+      {enableVerification &&
+        <>
+          <div className={styles.verificationPopUp} >
+          </div>
+
+          <form onSubmit={verifyStudentLogin} className={styles.verificationBox} >
+            <div id={styles.cancelButton} >
+              <p>VERIFICATION</p>
+              <span onClick={function() {
+                setEnableVerification(false);
+                document.body.style.overflowY = "auto";
+
+              }} >x</span>
+            </div>
+            <input type="text" required placeholder="Enter student id" value={studentId} onChange={(e) => setStudentId(e.target.value)} />
+            <input type="email" required placeholder="Enter email id" value={emailId} onChange={(e) => setEmailId(e.target.value)} />
+            <input type="password" required placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} />
+
+            <button type="submit" >Verify</button>
+            <div>
+              {verficationError && <p style={{ color: 'red' }}>{verficationError}</p>}
+              {verficationMessage && <p style={{ color: 'green' }}>{verficationMessage}</p>}
+            </div>
+          </form>
+
+        </>
+      }
+
+      {
+
+        enableVote &&
+        <>
+          <div className={styles.verificationPopUp} >
+          </div>
+
+          <div className={styles.verificationBox} >
+            {voteConfirmation ?
+
+              <>
+                {
+                  voteResult ?
+
+                    <>
+
+                      {
+
+                        voteDoneStatus ?
+
+
+                          <div style={{ width: "100%", height: "100%", alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', gap: "10px" }} >
+                            <p style={{ fontSize: "1.5rem" }} >THANK YOU FOR VOTING</p>
+                            <p style={{ fontWeight: 'bolder' }}>Your vote has been Counted</p>
+                            <FontAwesomeIcon icon={faCheck} style={{
+                              backgroundColor: 'green',
+                              width: "40px", height: "40px", padding: "10px", borderRadius: "50%"
+                            }} />
+                          </div>
+                          :
+
+                          <div style={{ width: "100%", height: "100%", alignItems: 'center', justifyContent: 'center', display: 'flex', flexDirection: 'column', gap: "10px" }} >
+                            <FontAwesomeIcon icon={faXmark} style={{
+                              backgroundColor: 'red',
+                              width: "40px", height: "40px", padding: "10px", borderRadius: "50%"
+                            }} />
+                            <p>{voteError || "FAILED TO ADD VOTE , PLEASE TRY AGAIN"}</p>
+                          </div>
+                      }
+
+                    </>
+
+                    :
+
+                    "LOADING"
+
+                }
+
+
+              </>
+
+              :
+
+              <>
+                <div id={styles.cancelButton} >
+                  <p>VOTE NOW</p>
+                  <span onClick={function() { 
+                    setEnableVote(false);
+                    document.body.style.overflowY = "auto";
+                  }} >x</span>
+                </div>
+                <p style={{ fontSize: "1.5rem" }} >PANEL CODE - {presidentCode}{vicePresidentCode}{generalSecetCode}{jointSecetCode}</p>
+                <div style={{ width: "100%", display: 'flex', gap: "10px", alignItems: 'center', justifyContent: 'center' }}  >
+                  <button onClick={addVote} >Vote</button>
+                </div>
+                {voteError && <p>error</p>}
+                <strong  >Important : </strong>
+                <p style={{
+                  color: "red",
+                  fontSize: "1.1rem",
+                  width: '400px',
+                  display: 'inline-block',
+                  textAlign: 'center'
+                }}>
+                  Once a vote has been cast, it cannot be reverted. <br />
+                  So, check the panel code before voting.
+                </p>
+              </>
+
+            }
+
+          </div>
+
+        </>
+
+      }
+
+
       <Navbar />
 
       <div className={styles.votingContainer}>
@@ -266,9 +534,12 @@ function Voting() {
                 </span>
               </span>
             </p>
-            <button  onClick={HandleOnSubmitVote}
-            className={styles.SubmitVote}>Submit Vote</button>
-            <p>{error}</p>
+            <button onClick={HandleOnSubmitVote}
+              className={styles.SubmitVote}>Submit Vote</button>
+            <div>
+              {error && <p style={{ color: 'red' }}>{error}</p>}
+              {message && <p style={{ color: 'greens' }} >{message}</p>}
+            </div>
           </div>
         </div>
       </div>

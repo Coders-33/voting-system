@@ -4,7 +4,7 @@
   width: 100%;
   overflow-y: auto;
   background-color: white;
-  height: 1300px;
+  height: 1500px;
 }
 
 .votingBoxItems {
@@ -90,4 +90,93 @@
 .SubmitVote:hover {
     transform: scale(1.02);
      background-color: #2b6abd;
+}
+
+
+.verificationPopUp  {
+   
+position: absolute;
+width: 100vw;
+height: 1650px;
+z-index: 4;
+background-color: black;
+opacity: 0.4;
+
+}
+
+.verificationBox { 
+  display: flex;
+  color : white;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 10px;
+gap : 20px;
+  position : absolute;
+  top : 50%;
+  left :50%;
+  z-index: 5;
+  transform: translate(-50% , -50%);
+  background-color: rgb(32, 32, 32);
+  width: 500px;
+  height: 400px;  
+}
+
+.verificationBox  input  {
+   width: 90%;
+   height: 40px;
+   border : none;
+   outline: none;
+   border-radius: 10px;
+   padding : 10px;
+}  
+ 
+.verificationBox button { 
+  width: 100px;
+  padding : 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #1877F2;
+  border : none;
+  outline : none; 
+  color : white;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition:  background-color 400ms;
+}
+
+
+.verificationBox button:hover {
+   background-color: #1294eb;
+}
+
+.verificationBox #cancelButton { 
+  position: relative;
+  top : 0px;
+  display: flex;
+align-items: center;
+font-size: 1.5rem;
+justify-content: center;
+  right: 0px;
+  height: 60px;
+  width: 100%;
+}
+
+.verificationBox #cancelButton span {
+   position: absolute;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   border-radius: 50%;
+   top : 8px;
+   cursor: pointer;
+   background-color:red;
+   font-weight: bolder;
+   right : 10px;
+   width: 30px;
+   height: 30px;
+}
+
+
+.allPartiesVotes { 
+  border : 1px solid black;
 }

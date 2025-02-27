@@ -1,14 +1,18 @@
 import jwt from "jsonwebtoken";
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 
 type TokenDataType = {
     email: string;
 }
 
+interface AuthRequest extends Request {
+    user?: any;
+}
+
 export function GenerateToken(data: TokenDataType) {
 
     // console.log(process.env.)
-if(!process.env.SECRET_KEY)return;
+    if (!process.env.SECRET_KEY) return;
 
     const key = process.env.SECRET_KEY;
     const token = jwt.sign(data, key, { expiresIn: "1hr" });
@@ -17,7 +21,7 @@ if(!process.env.SECRET_KEY)return;
 }
 
 export async function ValidateToken(req: Request, res: Response): Promise<void> {
-    
+
     const { token, email } = req.body;
 
     console.log(token);
@@ -35,7 +39,7 @@ export async function ValidateToken(req: Request, res: Response): Promise<void> 
     }
 
     try {
-        const decoded =  jwt.verify(token, tokenKey);
+        const decoded = jwt.verify(token, tokenKey);
         res.status(200).json({ message: "Token is valid", decoded });
     } catch (err) {
         res.status(403).json({ message: "Invalid or expired token" });
@@ -44,10 +48,31 @@ export async function ValidateToken(req: Request, res: Response): Promise<void> 
 }
 
 
+export function Authentication(req: AuthRequest, res: Response, next: NextFunction) {
 
+    const token = req.headers["authorization"];
+    if (!token) {
+        res.status(403).json({ error: "Access Denied" });
+        return;
+    }
 
+    const mainToken = token.split(" ")[1];
 
-export function Authentication() {
+    const key = process.env.SECRET_KEY;
+    if (!key) {
+        res.status(404).json({ error: "failed internal issue" });
+        return;
+    }
+
+    jwt.verify(mainToken, key, (error, decoded) => {
+        if (error) {
+            res.status(403).json({ error: "Invalid token" });
+            return;
+        }
+
+        req.user = decoded;
+        next();
+    })
 
 
 }

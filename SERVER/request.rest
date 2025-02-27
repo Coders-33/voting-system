@@ -2,9 +2,9 @@ POST http://0.0.0.0:5000/accounts/login
 Content-Type:  application/json
 
 {
-     "studentId" : 32923,
-     "email" : "varunjoshi1590@gmail.com",
-     "password"  : "va"
+     "studentId" : 11211,
+     "email" : "varunjoshi426@gmail.com",
+     "password"  : "varun"
 }
 
 
@@ -16,8 +16,14 @@ POST http://0.0.0.0:5000/accounts/signup
 Content-Type:  application/json
 
 {
-      "studentName" : "rahul diman",
-     "studentId" : 10239,
-     "email" : "varunjoshi1590@gmail.com",
-     "password"  : "341"
+      "studentName" : "coders",
+     "studentId" : 55155,
+     "email" : "3coders33@gmail.com",
+     "password"  : "12"
 }
+
+
+
+####
+
+GET http://0.0.0.0:5000/votes/fetch-all-votes

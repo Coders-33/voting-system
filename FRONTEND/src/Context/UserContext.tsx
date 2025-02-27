@@ -92,11 +92,11 @@ export function AuthContextProvider({ children }: AuthContextProviderType) {
                     });
                     const result = await response.json();
                     if (response.ok) {
-                        console.log(result.decoded);
                         const parsedToken = JSON.parse(token);
                         dispatch({ type: ACTIONS.SET_USER, payload: parsedToken });
                     }
                     if (!response.ok) {
+                        localStorage.removeItem("user-token");
                         dispatch({ type: ACTIONS.REMOVE_USER });
                     }
 
@@ -112,6 +112,18 @@ export function AuthContextProvider({ children }: AuthContextProviderType) {
         }
 
         CheckToken();
+
+
+        const handleStorageChange = (event : StorageEvent) => {
+            if (event.key === "email" || event.key === "token") {
+              localStorage.removeItem("user-token");
+            }
+          };
+      
+          window.addEventListener("storage", handleStorageChange);
+          return () => {
+            window.removeEventListener("storage", handleStorageChange);
+          };
 
     }, [])
 

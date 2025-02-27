@@ -9,7 +9,7 @@ function Navbar() {
 
   const [partyListBox, setPartyListBox] = useState<boolean>(false);
 
- const { dispatch} = useAuthContext();
+ const { dispatch , user} = useAuthContext();
 
   return (
      
@@ -69,7 +69,14 @@ function Navbar() {
           <button onClick={() => navigate("/voting/1230fdj1o2f1")}>
             Vote now
           </button>
-          <button onClick={() => navigate("/login")}>Login</button>
+          { user   ? 
+        
+        <div>{user.email}</div>
+        :
+        
+        <button onClick={() => navigate("/login")}>Login</button>
+
+        }
         </div>
       </nav>
  
