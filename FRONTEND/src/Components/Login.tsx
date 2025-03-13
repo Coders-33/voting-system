@@ -129,9 +129,6 @@ function Login() {
 
         const response = await fetch(`${BACKEND_URL}/accounts/login` , {
             method : "POST",
-            headers : {
-              "Authorization" : `Bearer ${user?.token}`   
-            },
             body : formData
         });
 

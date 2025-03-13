@@ -2,9 +2,9 @@ POST http://0.0.0.0:5000/accounts/login
 Content-Type:  application/json
 
 {
-     "studentId" : 11211,
-     "email" : "varunjoshi426@gmail.com",
-     "password"  : "varun"
+     "studentId" : 22314,
+     "email" : "varunjoshi1590@gmail.com",
+     "password"  : "ji"
 }
 
 

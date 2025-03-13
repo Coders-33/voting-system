@@ -1,18 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import styles from "../Styling/Dashboard.module.css";
-// import voteNow from "../images/vote-now.png";
+import voteNow from "../images/vote-now.png";
 import p1 from "../images/e1.jpg";
 import p2 from "../images/e2.jpg";
 import p3 from "../images/e3.jpg";
 import p4 from "../images/e4.jpg";
 import FooterImage from "../images/footerImage.jpg";
 import { Images } from "../script/GetImages";
-import { ScrollToTheTop } from "../script/GetData";
+import { ScrollToTheTop , maxTime } from "../script/GetData";
 import { useEffect, useRef, useState } from "react";
 import Footer from "./Footer";
 import Navbar from "../Small-components/Navbar";
 
-const maxTime = 1799651889756 + 5 * 60 * 60 * 1000;
+
 let intervalId: any;
 
 function Dashboard() {
@@ -110,24 +110,44 @@ function Dashboard() {
 
       <div className={styles.bottomContainer}>
         {/* vote now image */}
-        {/* <div
-          style={{
-            fontWeight: "bolder",
-            marginLeft: "20px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "30px",
-            marginTop: "30px",
-          }}
-        >
-          <img src={voteNow} alt="" id={styles.voteNow} />
-          <span style={{ fontSize: "2rem" }}>
-            {" "}
-            {formatTime(leftHours)} hr {formatTime(leftMinutes)} min{" "}
-            {formatTime(leftSeconds)} sec
-          </span>
-        </div> */}
+
+      { 
+        Date.now() > maxTime  ?
+
+        <div        
+        style={{
+          fontWeight: "bolder",
+          display: "flex",
+          fontSize : "2rem",
+          color : 'red',
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "30px",
+          marginTop: "20px",
+        }}
+        >VOTING ENDED</div>
+
+        :
+
+        <div
+        style={{
+          fontWeight: "bolder",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "30px",
+          marginTop: "20px",
+        }}
+      >
+        <img src={voteNow} alt="" id={styles.voteNow} />
+        <span style={{ fontSize: "2rem" , color : 'red' }}>Voting End's in :
+          {" "}
+          {formatTime(leftHours)} hr {formatTime(leftMinutes)} min{" "}
+          {formatTime(leftSeconds)} sec
+        </span>
+      </div>
+      }
+
 
         {/* parties info */}
 

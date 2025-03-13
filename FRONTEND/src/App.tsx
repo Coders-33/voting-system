@@ -8,6 +8,7 @@ import LiveResult from "./Components/LiveResult"
 import ForgetPassword from "./Components/ForgetPassword"
 import ResetPassword from "./Small-components/ResetPassword"
 import { useAuthContext } from "./Context/UserContext"
+import { maxTime } from "./script/GetData"
 
 
 function App() {
@@ -27,7 +28,7 @@ const { user }  = useAuthContext();
      <Route path="/contact" element={<Contact/>} />
      <Route path="/help" element={<Help/>} />
      <Route path="/live-result" element={ user ?  <LiveResult/> : <Login/>} />
-     <Route path="/voting/:id" element={ user ?  <Voting/> : <Login/> } />
+    { Date.now() < maxTime  && <Route path="/voting/:id" element={ user ?  <Voting/> : <Login/> } />}
      <Route path="/forget-password" element={<ForgetPassword/>} />
      <Route path="/rs/:id1/:id2" element={<ResetPassword/>} />
 

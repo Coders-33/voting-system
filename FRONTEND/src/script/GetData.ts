@@ -1,5 +1,8 @@
 export const BACKEND_URL  = "http://192.168.1.6:5000";
 
+export const maxTime = 1740730226618 + 5 * 60 * 60 * 1000;
+
+
 export function ScrollToTheTop(behaviourType: any) {
   window.scrollTo({
     top: 0,
