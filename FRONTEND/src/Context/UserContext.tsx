@@ -77,53 +77,14 @@ export function AuthContextProvider({ children }: AuthContextProviderType) {
 
             const token = localStorage.getItem("user-token");
             if (token) {
-
-
-                try {
-
-                    const response = await fetch(`${BACKEND_URL}/validate-token`, {
-
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: token
-
-                    });
-                    const result = await response.json();
-                    if (response.ok) {
-                        const parsedToken = JSON.parse(token);
-                        dispatch({ type: ACTIONS.SET_USER, payload: parsedToken });
-                    }
-                    if (!response.ok) {
-                        localStorage.removeItem("user-token");
-                        dispatch({ type: ACTIONS.REMOVE_USER });
-                    }
-
-                }
-                catch (error) {
-                    console.log(error)
-                    dispatch({ type: ACTIONS.REMOVE_USER });
-                }
+                const parsedToken = JSON.parse(token);
+                dispatch({ type: ACTIONS.SET_USER, payload: parsedToken });
 
             }
-
 
         }
 
-        CheckToken();
-
-
-        const handleStorageChange = (event : StorageEvent) => {
-            if (event.key === "email" || event.key === "token") {
-              localStorage.removeItem("user-token");
-            }
-          };
-      
-          window.addEventListener("storage", handleStorageChange);
-          return () => {
-            window.removeEventListener("storage", handleStorageChange);
-          };
+         CheckToken();
 
     }, [])
 

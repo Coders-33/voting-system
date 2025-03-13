@@ -11,7 +11,6 @@ interface AuthRequest extends Request {
 
 export function GenerateToken(data: TokenDataType) {
 
-    // console.log(process.env.)
     if (!process.env.SECRET_KEY) return;
 
     const key = process.env.SECRET_KEY;
@@ -24,7 +23,6 @@ export async function ValidateToken(req: Request, res: Response): Promise<void> 
 
     const { token, email } = req.body;
 
-    console.log(token);
     if (!token || !email) {
         res.status(401).json({ message: "Access Denied" });
         return;
@@ -32,7 +30,6 @@ export async function ValidateToken(req: Request, res: Response): Promise<void> 
 
     const tokenKey = process.env.SECRET_KEY;
 
-    console.log(tokenKey);
     if (!tokenKey) {
         res.status(500).json({ message: "Server error: Secret key is missing" });
         return;

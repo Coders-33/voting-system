@@ -1,45 +1,30 @@
-import styles from '../Styling/Footer.module.css';
+// Footer.tsx
+import styles from "../Styling/Footer.module.css";
 
-const Footer = () => {
+const Footer: React.FC = () => {
   return (
     <footer className={styles.footer}>
-      <section className={styles.footerSocial}>
-        <span>Get connected with us on social networks:</span>
-        <div className={styles.socialLinks}>
-          <a href="#!" className={styles.socialLink}>Facebook</a>
-          <a href="#!" className={styles.socialLink}>Twitter</a>
-          <a href="#!" className={styles.socialLink}>Google</a>
-          <a href="#!" className={styles.socialLink}>Instagram</a>
+      <div className={styles.footerContainer}>
+        <div className={styles.footerSection}>
+          <h4>About Us</h4>
+          <p>We build awesome web applications!</p>
         </div>
-      </section>
-
-      <section className={styles.footerInfo}>
-        <div className={styles.infoSection}>
-          <h6>About</h6>
-          <p>
-            The Online Voting System project demonstrates the application of full-stack development techniques.
-          </p>
+        <div className={styles.footerSection}>
+          <h4>Contact</h4>
+          <p>Email: contact@example.com</p>
+          <p>Phone: +123 456 7890</p>
         </div>
-        <div className={styles.infoSection}>
-          <h6>Useful links</h6>
-          <ul>
-            <li><a href="#!" className={styles.footerLink}>Login</a></li>
-            <li><a href="#!" className={styles.footerLink}>Parties List</a></li>
-            <li><a href="#!" className={styles.footerLink}>Live Result</a></li>
-            <li><a href="#!" className={styles.footerLink}>Help</a></li>
-          </ul>
+        <div className={styles.footerSection}>
+          <h4>Follow Us</h4>
+          <div className={styles.socialLinks}>
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+          </div>
         </div>
-        <div className={styles.infoSection}>
-          <h6>Contact</h6>
-          <p>Sri Guru Gobind Singh College.</p>
-          <p>khalsacollegemohali@gmail.com</p>
-          <p>+8437766329</p>
-          <p>+8556928121</p>
-        </div>
-      </section>
-
+      </div>
       <div className={styles.footerBottom}>
-        <p>© 2025 Copyright: SmartCampus.com</p>
+        <p>&copy; 2024 MyWebsite. All Rights Reserved.</p>
       </div>
     </footer>
   );

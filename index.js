@@ -1,6 +1,8 @@
-const time = 1740730226618;
-const hourtime = 4 * 60 * 60 * 1000;
-const mintime = 43 * 60  * 1000;
-const newTime = time - (hourtime + mintime);
+const fs = require("node:fs");
+const path = require("node:path");
 
-console.log(newTime);
+
+const pathDir  = "/home/varun/Personal-data/FULL STACK DEVLOPMENT/GIT-HUB/Basic-projects/voting-system/file.txt"
+
+ const data = fs.readFileSync(pathDir , "utf-8");
+ console.log(data);

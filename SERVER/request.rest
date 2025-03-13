@@ -16,9 +16,9 @@ POST http://0.0.0.0:5000/accounts/signup
 Content-Type:  application/json
 
 {
-      "studentName" : "coders",
-     "studentId" : 55155,
-     "email" : "3coders33@gmail.com",
+      "studentName" : "sahil",
+     "studentId" : 45451,
+     "email" : "englishcontent428@gmail.com",
      "password"  : "12"
 }
 

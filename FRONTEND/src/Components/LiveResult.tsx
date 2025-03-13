@@ -150,7 +150,7 @@ const LiveResult: React.FC = () => {
 
         <div className={styles.votingGraph}>
           <h2>Live Voting Result</h2>
-          <Bar data={data} options={options} />
+          <Bar data={data} options={options}  />
         </div>
       </div>
 

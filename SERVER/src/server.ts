@@ -68,7 +68,7 @@ app.use("/socket.io", (req: Request, res: Response, next: Function) => {
 
 app.post("/validate-token", ValidateToken);
 app.use("/accounts",  StudentRoute);
-app.use("/votes", Authentication, VotingRoute);
+app.use("/votes", VotingRoute);
 
 
 

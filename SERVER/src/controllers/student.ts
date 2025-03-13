@@ -156,15 +156,16 @@ export async function handleSendOTP(req: Request, res: Response): Promise<void> 
         const mailOptions = {
             from: process.env.EMAIL_USER,
             to: email,
-            subject: "Password Reset OTP",
+            subject: "Password Reset OTP By SGGS Voting Campus",
             text: `Your OTP for password reset is: ${OTP}`
         }
 
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 res.status(505).json({ error: "Failed to Send OTP" })
+                return; 
             }
-        })
+        });
 
         res.status(200).json({ message: "OTP sent successfully", candidateId: candidateId });
 
@@ -183,7 +184,6 @@ export async function handleVerificationOfOTP(req: Request, res: Response): Prom
     try {
 
         if (!OTP_STORAGE[email]) {
-            console.log("Invalid OTP, request a new one.");
             res.status(401).json({ message: "Invalid OTP, request a new one." });
             return;
         }
@@ -191,13 +191,11 @@ export async function handleVerificationOfOTP(req: Request, res: Response): Prom
         const { expirationTime, OTP } = OTP_STORAGE[email];
 
         if (Date.now() > expirationTime) {
-            console.log("OTP expired, try again later");
             res.status(410).json({ message: "OTP expired, try again later" });
             return
         }
 
         if (OTP != enteredOTP) {
-            console.log("wrong otp req");
             res.status(400).json({ message: "Wrong OTP" });
             return;
         }
@@ -309,7 +307,6 @@ function StoreOTPAndCleanUp(OTP: number, email: string, defaultExpTime = 60000) 
     setTimeout(() => {
 
         delete OTP_STORAGE[email]
-        console.log(`OTP for ${email} expired and removed.`);
 
     }, defaultExpTime);
 

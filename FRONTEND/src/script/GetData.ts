@@ -1,6 +1,36 @@
-export const BACKEND_URL  = "http://192.168.1.6:5000";
+export const BACKEND_URL  = "http://192.168.1.20:5000";
 
-export const maxTime = 1740730226618 + 5 * 60 * 60 * 1000;
+
+export let cacheTime : any = 0;
+export let startingTime : any = 0;
+
+
+
+export const maxTime = 1741885245406 + 0.6 * 60 * 60 * 1000;
+
+
+export async function GetVotingTimings() { 
+
+try {
+   const response  = await fetch(`${BACKEND_URL}/votes/voting-times` , {  method : "GET"});
+   const result = await response.json();
+   if(response.ok) {
+     const times  = result.timings;
+     const startingTimeStamps = new Date(times.startingTime).getTime();
+     const endingTimeStamps = new Date(times.endingTime).getTime();
+
+     const differtime = startingTimeStamps + (endingTimeStamps - startingTimeStamps);
+       cacheTime = differtime;
+      startingTime = startingTimeStamps;
+     return {startingTimeStamps , cacheTime};
+   }
+
+}
+catch(error) { 
+  return cacheTime;
+}
+
+}
 
 
 export function ScrollToTheTop(behaviourType: any) {

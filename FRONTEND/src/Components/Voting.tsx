@@ -209,10 +209,10 @@ function Voting() {
   }
 
   return (
-    <>
+    <div>
 
       {enableVerification &&
-        <>
+        <div>
           <div className={styles.verificationPopUp} >
           </div>
 
@@ -236,13 +236,13 @@ function Voting() {
             </div>
           </form>
 
-        </>
+        </div>
       }
 
       {
 
         enableVote &&
-        <>
+        <div>
           <div className={styles.verificationPopUp} >
           </div>
 
@@ -292,7 +292,7 @@ function Voting() {
 
               :
 
-              <>
+              <div className={styles.verificationBox} >
                 <div id={styles.cancelButton} >
                   <p>VOTE NOW</p>
                   <span onClick={function() { 
@@ -308,21 +308,22 @@ function Voting() {
                 <strong  >Important : </strong>
                 <p style={{
                   color: "red",
+                  wordWrap : "break-word",
                   fontSize: "1.1rem",
-                  width: '400px',
+                  width: 'inherit',
                   display: 'inline-block',
                   textAlign: 'center'
                 }}>
                   Once a vote has been cast, it cannot be reverted. <br />
                   So, check the panel code before voting.
                 </p>
-              </>
+              </div>
 
             }
 
           </div>
 
-        </>
+        </div>
 
       }
 
@@ -361,9 +362,6 @@ function Voting() {
                   </span>
                 </label>
               ))}
-              <p>
-                {selectedPresident} , {presidentCode}
-              </p>
             </div>
           </div>
 
@@ -401,9 +399,7 @@ function Voting() {
                   </span>
                 </label>
               ))}
-              <p>
-                {selectedVicePresident},{vicePresidentCode}
-              </p>
+      
             </div>
           </div>
 
@@ -439,9 +435,7 @@ function Voting() {
                   </span>
                 </label>
               ))}
-              <p>
-                {selectedGeneralSect} , {generalSecetCode}
-              </p>
+        
             </div>
           </div>
 
@@ -475,9 +469,7 @@ function Voting() {
                   </span>
                 </label>
               ))}
-              <p>
-                {selectedJoinSect} , {jointSecetCode}
-              </p>
+          
             </div>
           </div>
 
@@ -544,7 +536,7 @@ function Voting() {
         </div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 }
 
