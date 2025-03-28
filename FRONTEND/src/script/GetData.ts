@@ -1,4 +1,4 @@
-export const BACKEND_URL  = "http://192.168.1.20:5000";
+export const BACKEND_URL  = "http://localhost:5000";
 
 
 export let cacheTime : any = 0;

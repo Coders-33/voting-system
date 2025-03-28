@@ -79,7 +79,7 @@ const userIconStyle : any= {
       <div ref={leftBarRef} className={styles.navLeftSideItems}>
         <FontAwesomeIcon onClick={() => setLeftSideBarEnable(false)} icon={faArrowLeft} id={styles.closeLeftBar} />
         <img onClick={() => navigate("/")} src={logo} alt="" id={styles.homeIconImage} />
-        <span>About</span>
+        <span onClick={() => navigate("/about")} >About</span>
         <span onClick={() => !user ? navigate("/login") : navigate("/live-result")} >Live Result</span>
         <span onClick={() => navigate("/contact")}>Contact</span>
         <span onClick={() => navigate("/help")}>Help</span>

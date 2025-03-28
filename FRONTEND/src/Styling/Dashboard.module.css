@@ -256,7 +256,7 @@ footer .footerItems img:hover {
   height: 800px;
   width: 100%;
   overflow: hidden;
-  background-size: contain;
+  background-size: cover;
   margin-bottom: 50px;
   background-repeat: no-repeat;
 }
@@ -425,7 +425,6 @@ footer .footerItems img:hover {
 
     height: 350px;
     width: 100%;
-
     background-size: cover;
   }
 

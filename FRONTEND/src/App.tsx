@@ -10,6 +10,7 @@ import ResetPassword from "./Small-components/ResetPassword"
 import { useAuthContext } from "./Context/UserContext"
 import { startingTime , cacheTime } from "./script/GetData"
 import Admin from "./Small-components/Admin"
+import About from "./Components/About"
 
 
 function App() {
@@ -32,6 +33,8 @@ const { user }  = useAuthContext();
      <Route path="/forget-password" element={<ForgetPassword/>} />
      <Route path="/admin" element={<Admin/>} />
      <Route path="/rs/:id1/:id2" element={<ResetPassword/>} />
+     <Route path="/about" element={<About/>} />
+
 
 
     
