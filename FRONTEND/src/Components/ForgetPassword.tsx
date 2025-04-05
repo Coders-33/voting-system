@@ -100,7 +100,6 @@ const ForgetPassword = () => {
 
             if (response.ok) {
                 setMessage(result.message || "Verification successful!");
-                  console.log("ids -> " , result);
                 setTimeout(() => {
                     navigate(`/rs/${candidateId}/${result?.keyId}`);
                     return;

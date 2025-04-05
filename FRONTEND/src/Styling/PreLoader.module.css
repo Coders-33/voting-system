@@ -1,0 +1,23 @@
+.preloader {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #111;
+  }
+  
+  .spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid #ccc;
+    border-top-color: #00ffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  

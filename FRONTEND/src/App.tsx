@@ -1,4 +1,4 @@
-import { BrowserRouter , Routes , Route, useNavigate} from "react-router-dom"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Login from "./Components/Login"
 import Dashboard from "./Components/Dashboard"
 import Contact from "./Components/Contact"
@@ -8,38 +8,42 @@ import LiveResult from "./Components/LiveResult"
 import ForgetPassword from "./Components/ForgetPassword"
 import ResetPassword from "./Small-components/ResetPassword"
 import { useAuthContext } from "./Context/UserContext"
-import { startingTime , cacheTime } from "./script/GetData"
 import Admin from "./Small-components/Admin"
 import About from "./Components/About"
-
+import AdminLogin from "./Components/AdminLogin"
+import { startingTime } from "./script/GetData"
+import NotFound from "./Small-components/NotFound"
 
 function App() {
 
-  
-const { user }  = useAuthContext();
 
+  const { user, admin } = useAuthContext();
 
   return (
     <>
-   <BrowserRouter>
-   
-    <Routes>
-    <Route path="/" element={<Dashboard/>} />
-     <Route path="/login" element={<Login/>} />
-     <Route path="/contact" element={<Contact/>} />
-     <Route path="/help" element={<Help/>} />
-     <Route path="/live-result" element={ user ?  <LiveResult/> : <Login/>} />
-    <Route path="/voting/:id" element={ user ?  <Voting/> : <Login/> } />
-     <Route path="/forget-password" element={<ForgetPassword/>} />
-     <Route path="/admin" element={<Admin/>} />
-     <Route path="/rs/:id1/:id2" element={<ResetPassword/>} />
-     <Route path="/about" element={<About/>} />
+      <BrowserRouter>
+
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/help" element={<Help />} />
+          <Route path="/live-result" element={user ? <LiveResult /> : <Login />} />
+          {Date.now() > startingTime && <Route path="/voting/:id" element={user ? <Voting /> : <Login />} />}
+          <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/admin-access" element={admin ? <Admin /> : <AdminLogin />} />
+          <Route path="/rs/:id1/:id2" element={<ResetPassword />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/admin-login" element={admin ? <Admin /> : <AdminLogin />} />
+          <Route path="*" element={<NotFound />} />
 
 
 
-    
-    </Routes>
-   </BrowserRouter>
+
+
+
+        </Routes>
+      </BrowserRouter>
 
 
     </>

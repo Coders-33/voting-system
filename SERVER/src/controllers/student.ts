@@ -36,52 +36,61 @@ export async function handleStudentLogin(req: Request, res: Response): Promise<v
     }
 
     const { studentId, email, password } = req.body;
-     
-    const candidateId  = Number(studentId);
-     
+
+    const candidateId = Number(studentId);
+
     const query = {
         $and: [
-          { studentId: candidateId },
-          { email: email }
+            { studentId: candidateId },
+            { email: email }
         ]
-      };
-      
-     try {
-         
-        const candiate : any = await studentDoc.findOne(query);
-        if(!candiate || candiate == "") {
-             res.status(404).json({ error : "Invalid email or Student Id"});
-             return;
+    };
+
+    try {
+
+        const candiate: any = await studentDoc.findOne(query);
+        if (!candiate || candiate == "") {
+            res.status(404).json({ error: "Invalid email or Student Id" });
+            return;
         }
 
-          const hashPassword = candiate.password;
-          const salting = candiate.salting;
+        const hashPassword = candiate.password;
+        const salting = candiate.salting;
 
-          const PassHash = crypto.createHmac("sha256" , salting).update(password).digest("hex");
-          if(hashPassword != PassHash) {
-            res.status(404).json({ error : "Incorrect Password"});
+        const PassHash = crypto.createHmac("sha256", salting).update(password).digest("hex");
+        if (hashPassword != PassHash) {
+            res.status(404).json({ error: "Incorrect Password" });
             return;
-          }
+        }
 
-          // authentication 
-           
-           const tokenData = {
-               email : candiate.email
-           }
+        // authentication 
 
-          const token = GenerateToken(tokenData);
+        const tokenData = {
+            email: candiate.email
+        }
 
-          const  loginData = { 
-            token : token,
-            email : candiate.email
-          }
-          res.status(200).json({ message : "Logged In Successfuly" , loginData });
- 
-     }
-     catch(error) {
-         res.status(404).json({ error: "Failed to login internal fault" })
-     }
-     
+        const token = GenerateToken(tokenData);
+
+        const loginData = {
+            userId: candiate._id,
+            token: token,
+        studentName : candiate.studentName,
+            email: candiate.email
+        }
+
+        res.cookie("userAuth-token", loginData, {
+            httpOnly: true,
+            secure: false,
+            maxAge: 60 * 60 * 1000
+        });
+
+        res.status(200).json({ data: loginData, message: "Logged In Successfuly" });
+
+    }
+    catch (error) {
+        res.status(404).json({ error: "Failed to login internal fault" })
+    }
+
 
 }
 
@@ -163,7 +172,7 @@ export async function handleSendOTP(req: Request, res: Response): Promise<void> 
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 res.status(505).json({ error: "Failed to Send OTP" })
-                return; 
+                return;
             }
         });
 
@@ -265,11 +274,13 @@ export async function handleChangePasscode(req: Request, res: Response): Promise
 
     }
     catch (error) {
-         res.status(505).json({ error : "Internal Error "});
+        res.status(505).json({ error: "Internal Error " });
     }
 
 
 }
+
+
 
 
 // ----------  Other Logic Functions   -------  //

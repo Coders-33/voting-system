@@ -2,22 +2,19 @@ import Navbar from "../Small-components/Navbar";
 import styles from "../Styling/Voting.module.css";
 import Footer from "./Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faL, faXmark } from "@fortawesome/free-solid-svg-icons";
-import {
-  President,
-  VicePresident,
-  GeneralSecretary,
-  JointSecretary,
-  BACKEND_URL,
-} from "../script/GetData";
+import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { BACKEND_URL, startingTime, } from "../script/GetData";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuthContext } from "../Context/UserContext";
+import { usePartyContext } from "../Context/PartyContext";
+import Preloader from "../Small-components/PreLoader";
 
 function Voting() {
 
-   const { user } = useAuthContext(); 
+  const { user } = useAuthContext();
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const [selectedPresident, setSelectedPresident] = useState<string>("");
   const [selectedVicePresident, setVicePresident] = useState<string>("");
@@ -36,7 +33,7 @@ function Voting() {
   const [jointSecetCode, setJointSecetCode] = useState<number | null>(null);
 
   const [studentId, setStudentId] = useState<string>("");
-  const [emailId, setEmailId] = useState<string>("");
+  const [emailId, setEmailId] = useState<string>(`${user?.email}`);
   const [password, setPassword] = useState<string>("");
 
 
@@ -47,7 +44,24 @@ function Voting() {
   const [enableVote, setEnableVote] = useState<boolean>(false);
   const [voteConfirmation, setVoteConfirmation] = useState<boolean>(false);
 
-  const [DATA_studentid , setDataStudentId] = useState<number | null>(null);
+  const [DATA_studentid, setDataStudentId] = useState<number | null>(null);
+
+  const { fetchParties } = usePartyContext();
+  const [allParties, setAllParties] = useState<any | null>(null);
+
+
+  const [showMain, setShowMain] = useState<boolean>(false);
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // true  after two seconds
+      setShowMain(true);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
 
   useEffect(() => {
 
@@ -70,6 +84,21 @@ function Voting() {
     clearUi();
 
   }, [error, message, verficationError, verficationMessage])
+
+
+  useEffect(() => {
+
+    async function GetAllParties() {
+      const parties = await fetchParties();
+
+      setAllParties(parties);
+    }
+
+    GetAllParties();
+
+  }, [])
+
+
 
   function SelectPresidentAndCode(PresName: string, code: number) {
     setSelectedPresident(PresName);
@@ -105,7 +134,6 @@ function Voting() {
       top: 0,
       behavior: "smooth"
     })
-    // document.body.style.overflowY = "hidden";
     setEnableVerification(true);
   }
 
@@ -145,7 +173,6 @@ function Voting() {
       }
     }
     catch (error: any) {
-      console.log("error", error);
       setVerificationError(error);
     }
 
@@ -172,7 +199,7 @@ function Voting() {
       const response = await fetch(`${BACKEND_URL}/votes/add-new-vote`, {
         method: "POST",
         headers: {
-          "Authorization" : `Bearer ${user?.token}`,
+          "Authorization": `Bearer ${user?.token}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify(votingData)
@@ -181,11 +208,10 @@ function Voting() {
       const result = await response.json();
 
       if (response.ok) {
-        document.body.style.overflowY= "auto";
+        document.body.style.overflowY = "auto";
         setVoteResult(true);
         setVoteConfirmation(true);
         setVoteDoneStatus(true);
-        console.log(result.message);
         setTimeout(() => {
           navigate("/")
         }, 2000);
@@ -208,6 +234,26 @@ function Voting() {
     }
   }
 
+  if (Date.now() < startingTime) {
+    window.location.href = "/";
+    navigate("/");
+    return;
+  }
+
+  if (user?.userId != id) {
+    window.location.href = "/error";
+    navigate("/error");
+    return;
+  }
+
+
+
+  if (!showMain) {
+    return <Preloader />
+  }
+
+
+
   return (
     <div>
 
@@ -219,14 +265,16 @@ function Voting() {
           <form onSubmit={verifyStudentLogin} className={styles.verificationBox} >
             <div id={styles.cancelButton} >
               <p>VERIFICATION</p>
-              <span onClick={function() {
+              <span onClick={function () {
                 setEnableVerification(false);
                 document.body.style.overflowY = "auto";
 
               }} >x</span>
             </div>
             <input type="text" required placeholder="Enter student id" value={studentId} onChange={(e) => setStudentId(e.target.value)} />
-            <input type="email" required placeholder="Enter email id" value={emailId} onChange={(e) => setEmailId(e.target.value)} />
+            <input type="email"
+              style={{ color: "white", userSelect: "none" }}
+              disabled={true} placeholder="Enter email id" value={user?.email} onChange={(e) => setEmailId(e.target.value)} />
             <input type="password" required placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
             <button type="submit" >Verify</button>
@@ -295,7 +343,7 @@ function Voting() {
               <div className={styles.verificationBox} >
                 <div id={styles.cancelButton} >
                   <p>VOTE NOW</p>
-                  <span onClick={function() { 
+                  <span onClick={function () {
                     setEnableVote(false);
                     document.body.style.overflowY = "auto";
                   }} >x</span>
@@ -308,7 +356,7 @@ function Voting() {
                 <strong  >Important : </strong>
                 <p style={{
                   color: "red",
-                  wordWrap : "break-word",
+                  wordWrap: "break-word",
                   fontSize: "1.1rem",
                   width: 'inherit',
                   display: 'inline-block',
@@ -331,11 +379,12 @@ function Voting() {
       <Navbar />
 
       <div className={styles.votingContainer}>
-        <div className={styles.votingBoxItems}>
+        {allParties != null ? <div className={styles.votingBoxItems}>
           <div>
             <p id={styles.CandidatePost}>PRESIDENT</p>
             <div className={styles.eachSectionCandidate}>
-              {President.map((each, index) => (
+
+              {allParties.presidents.map((each: any, index: any) => (
                 <label key={index} className={styles.eachInfoSection}>
                   <input
                     type="radio"
@@ -368,7 +417,7 @@ function Voting() {
           <div>
             <p id={styles.CandidatePost}>VICE PRESIDENT</p>
             <div className={styles.eachSectionCandidate}>
-              {VicePresident.map((each, index) => (
+              {allParties.vicePresidents.map((each: any, index: any) => (
                 <label key={index} className={styles.eachInfoSection}>
                   <input
                     type="radio"
@@ -399,14 +448,14 @@ function Voting() {
                   </span>
                 </label>
               ))}
-      
+
             </div>
           </div>
 
           <div>
             <p id={styles.CandidatePost}>GENERAL SECRETARY</p>
             <div className={styles.eachSectionCandidate}>
-              {GeneralSecretary.map((each, index) => (
+              {allParties.generalSecretaries.map((each: any, index: any) => (
                 <label key={index} className={styles.eachInfoSection}>
                   <input
                     type="radio"
@@ -435,14 +484,14 @@ function Voting() {
                   </span>
                 </label>
               ))}
-        
+
             </div>
           </div>
 
           <div>
             <p id={styles.CandidatePost}>JOINT SECRETARY</p>
             <div className={styles.eachSectionCandidate}>
-              {JointSecretary.map((each, index) => (
+              {allParties.jointSecretaries.map((each: any, index: any) => (
                 <label key={index} className={styles.eachInfoSection}>
                   <input
                     type="radio"
@@ -469,7 +518,7 @@ function Voting() {
                   </span>
                 </label>
               ))}
-          
+
             </div>
           </div>
 
@@ -534,6 +583,9 @@ function Voting() {
             </div>
           </div>
         </div>
+          :
+          <div>CANDIDATES OR MEMBERS ARE NOT ADDED YET</div>
+        }
       </div>
       <Footer />
     </div>

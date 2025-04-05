@@ -54,7 +54,7 @@ const Contact: React.FC = () => {
           onChange={handleChange}
           required
           rows={5}
-          style={{ resize :"none" }}
+          style={{ resize: "none" }}
           className={styles.textarea}
         ></textarea>
         <button type="submit" className={styles.button}>Send Message</button>
@@ -62,9 +62,9 @@ const Contact: React.FC = () => {
 
       <div className={styles.socialLinks}>
         <p>Follow us:</p>
-        <a href="#">Facebook</a> | 
-        <a href="#">Twitter</a> | 
-        <a href="#">Instagram</a>
+        <a href="https://www.facebook.com/sggschd" target="_blank" className="me-4 text-reset"><i className="fab fa-facebook-f"></i></a>
+        <a href="https://x.com/i/flow/login?redirect_after_login=%2Fsggsc26chd" target="_blank" className="me-4 text-reset"><i className="fab fa-twitter"></i></a>
+        <a href="https://www.instagram.com/sggsclg_26chd/" target="_blank" className="me-4 text-reset"><i className="fab fa-instagram"></i></a>
       </div>
     </div>
   );

@@ -16,9 +16,9 @@ POST http://0.0.0.0:5000/accounts/signup
 Content-Type:  application/json
 
 {
-      "studentName" : "sahil",
-     "studentId" : 45451,
-     "email" : "englishcontent428@gmail.com",
+      "studentName" : "divyashu",
+     "studentId" : 50001,
+     "email" : "divyanshu12@gmail.com",
      "password"  : "12"
 }
 
@@ -27,3 +27,17 @@ Content-Type:  application/json
 ####
 
 GET http://0.0.0.0:5000/votes/fetch-all-votes
+
+
+
+
+####
+
+POST http://0.0.0.0:5000/admin/admin-access-signUp/ff7ee3b2f0010eb93db63d0307e90fc07edcb2afee5a9c9198378fb1b000
+Content-Type:  application/json
+
+{
+      "adminName" : "varun joshi",
+      "email" : "varunjoshi6283@gmail.com",
+      "password" : "varun"
+}

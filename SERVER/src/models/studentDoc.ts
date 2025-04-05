@@ -32,4 +32,4 @@ const CandidateSchema = new Schema({
 }, { timestamps: true });
 
 
-export default model("CandiateAccounts", CandidateSchema);
+export default model("StudentAccounts", CandidateSchema);

@@ -1,15 +1,15 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styles from "../Styling/Sign.module.css";
 import { useNavigate } from "react-router-dom";
 import { BACKEND_URL } from "../script/GetData";
-import { useAuthContext , ACTIONS } from "../Context/UserContext";
+import { useAuthContext, ACTIONS } from "../Context/UserContext";
 
 
 function Login() {
 
     const navigate = useNavigate();
 
-    const { dispatch , user } = useAuthContext();
+    const { dispatch, user, setUserLoggedIn  } = useAuthContext();
 
     const emailInputRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLSpanElement>(null);
@@ -20,10 +20,12 @@ function Login() {
     const studentIdRef = useRef<HTMLSpanElement>(null);
     const studentInputRef = useRef<HTMLInputElement>(null);
 
-    
-    const [studentIdValue , setStudentId]  = useState<string>("");
+
+    const [studentIdValue, setStudentId] = useState<string>("");
     const [emailValue, setEmailValue] = useState<string>("");
     const [passValue, setPassValue] = useState<string>("");
+
+    const [error, setError] = useState<string | null>(null);
 
 
     useEffect(() => {
@@ -98,6 +100,18 @@ function Login() {
     }, [studentIdValue, studentInputRef]);
 
 
+    const clearUi = useCallback(() => {
+        const timeoutId = setTimeout(() => {
+            setError(null);
+        }, 1500);
+
+        return () => clearTimeout(timeoutId)
+    }, [error])
+
+    useEffect(() => {
+        clearUi();
+    }, [error, clearUi])
+
 
     function handleFocus(element: HTMLSpanElement) {
         element.style.top = "-20px";
@@ -112,7 +126,7 @@ function Login() {
     }
 
     function handleForgetPassword() {
- 
+
         navigate("/forget-password");
 
     }
@@ -122,31 +136,33 @@ function Login() {
 
         const formData = new FormData();
 
-        formData.append("studentId" , studentIdValue);
-        formData.append("email" , emailValue);
-        formData.append("password" , passValue);
+        formData.append("studentId", studentIdValue);
+        formData.append("email", emailValue);
+        formData.append("password", passValue);
 
 
-        const response = await fetch(`${BACKEND_URL}/accounts/login` , {
-            method : "POST",
-            body : formData
+        const response = await fetch(`${BACKEND_URL}/accounts/login`, {
+            method: "POST",
+            body: formData,
+            credentials: "include",
         });
 
-       const result = await response.json();
-       if(response.ok) { 
-       
-        const userToken = result.loginData;
-        if(userToken) {
-            dispatch({ type : ACTIONS.SET_USER , payload : userToken });
-            localStorage.setItem("user-token" , JSON.stringify(userToken));
+        const result = await response.json();
+        if (response.ok) {
+
+            const userToken = result.data;
+            if (userToken) {
+                setUserLoggedIn('TRUE');
+                dispatch({ type: ACTIONS.SET_USER, payload: userToken });
+            }
+            navigate("/");
+            return;
         }
-         
-         navigate("/");
-       }         
-       
-       if(!response.ok) {
-         console.log(result);   
-       }
+
+        if (!response.ok) {
+            setError(result.error);
+
+        }
 
     }
 
@@ -163,12 +179,12 @@ function Login() {
                 <div className={styles.SignContainer} >
 
                     <div style={{
-                        display: "flex", width: "100%", height: "95px", marginLeft : "20px",
-                        alignItems: "center" , fontSize : "2rem" , fontWeight : "bolder" , color : "white"
+                        display: "flex", width: "100%", height: "95px", marginLeft: "20px",
+                        alignItems: "center", fontSize: "2rem", fontWeight: "bolder", color: "white"
                     }} >Vote Now
                     </div>
- 
-                        
+
+
                     <p style={{ marginBottom: "40px", fontSize: "1.5rem", marginLeft: "20px", fontWeight: "bolder" }} >Log In</p>
 
                     <form onSubmit={handleLogIn} className={styles.formContainer}  >
@@ -176,9 +192,9 @@ function Login() {
                         <div id={styles.inputDiv} >
                             <span ref={studentIdRef} id={styles.spanLabel}>Student Id*</span>
                             <input ref={studentInputRef} id={styles.inputField} required
-                                value={studentIdValue} onChange={function(e : React.ChangeEvent<HTMLInputElement>) {
-                                     if(isNaN(Number(e.target.value))) return;
-                                     setStudentId(e.target.value);
+                                value={studentIdValue} onChange={function (e: React.ChangeEvent<HTMLInputElement>) {
+                                    if (isNaN(Number(e.target.value))) return;
+                                    setStudentId(e.target.value);
                                 }}
                                 type="text" />
                         </div>
@@ -192,7 +208,7 @@ function Login() {
 
                         <div id={styles.inputDiv} >
                             <span onClick={handleForgetPassword} ref={passRef} id={styles.spanLabel}>Password*</span>
-                            <input ref={passInputRef} id={styles.inputField}  required
+                            <input ref={passInputRef} id={styles.inputField} required
                                 value={passValue} onChange={(e) => setPassValue(e.target.value)}
                                 type="text" />
                         </div>
@@ -203,7 +219,7 @@ function Login() {
 
                         <div style={{ display: "flex", justifyContent: "space-around", marginTop: "50px" }} >
 
-                            <button type="submit"className={styles.LogInButton} >Log In</button>
+                            <button type="submit" className={styles.LogInButton} >Log In</button>
                             <button onClick={() => navigate("/")} className={styles.CannelButton}>Cancel</button>
 
                         </div>
@@ -213,7 +229,12 @@ function Login() {
                     </form>
 
 
-
+                    {error && <p
+                        style={{
+                            color: "red", display: "flex",
+                            alignItems: "center", justifyContent: "center", padding: "10px"
+                        }}
+                    >{error}</p>}
                 </div>
 
             </div>

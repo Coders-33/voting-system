@@ -1,18 +1,20 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors"
 import dotenv from "dotenv";
-import { Server } from "socket.io";
 import bodyParser from "body-parser";
 import http from "http";
 import nodemailer from "nodemailer";
+import cookieParser from "cookie-parser";
 import { connect } from "mongoose";
 dotenv.config();
 
 // Routes
 import StudentRoute from "./routes/student";
-import { Authentication, ValidateToken } from "./authentication/authenticate";
+import AuthRoute from "./routes/auth";
 import VotingRoute from "./routes/voting";
+import AdminRoute from "./routes/admin";
 
+// This is for mail to the other students and user
 export const transporter = nodemailer.createTransport({
 
     service: "gmail",
@@ -25,61 +27,54 @@ export const transporter = nodemailer.createTransport({
 });
 
 
+function createAndStartServer() {
 
+    const PORT = process.env.PORT;
+    const NETWORK_PORT: any = process.env.NETWORK_PORT;
+    const app = express();
+    const server = http.createServer(app);
 
-const PORT = process.env.PORT;
-const NETWORK_PORT: any = process.env.NETWORK_PORT;
-const app = express();
-const server = http.createServer(app);
+    const allowedOrigins = [
+        "http://localhost:5173",
+        "http://192.168.1.3:5173",
+    ];
 
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: true }));
+    app.use(bodyParser.json());
+    app.use(cookieParser());
 
-app.use(cors());
-app.use(express.json());
-app.use(bodyParser.json());
-
-
-const io = new Server(server, {
-
-    cors: {
-        origin: "*",
+    app.use(cors({
+        origin: allowedOrigins,
+        credentials: true,
         methods: ["GET", "POST"],
-        credentials: true
-
-    },
-    maxHttpBufferSize: 1e8
-
-})
-
-app.use(cors({
-
-    origin: "*",
-    methods: ["GET", "POST"],
-    credentials: true
-
-}))
-
-app.use("/socket.io", (req: Request, res: Response, next: Function) => {
-    res.set("Cache-Control", "no-store")
-    next();
-})
+        allowedHeaders: ["Content-Type", "Authorization"]
+    }))
 
 
 
 
-app.post("/validate-token", ValidateToken);
-app.use("/accounts",  StudentRoute);
-app.use("/votes", VotingRoute);
+    app.use("/auth", AuthRoute);
+    app.use("/accounts", StudentRoute);
+    app.use("/votes", VotingRoute);
+    app.use("/admin", AdminRoute)
 
 
 
-server.listen(PORT, NETWORK_PORT, async () => {
 
-    try {
-        await connect("mongodb://127.0.0.1:27017/VotingSystem");
-        console.log(`Mongodb Connected And Server running at   http://0.0.0.0:${PORT}`);
-    }
-    catch (error) {
-        console.log("Database connection error : ", error);
-    }
-});
 
+    server.listen(PORT, NETWORK_PORT, async () => {
+
+        try {
+            await connect("mongodb://127.0.0.1:27017/VotingSystem");
+            console.log(`Mongodb Connected And Server running at   http://0.0.0.0:${PORT}`);
+        }
+        catch (error) {
+            console.log("Database connection error : ", error);
+        }
+    });
+
+
+}
+
+createAndStartServer();

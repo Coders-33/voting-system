@@ -13,123 +13,90 @@ import {
 import Footer from "./Footer";
 import styles from "../Styling/LiveResult.module.css";
 import Navbar from "../Small-components/Navbar";
-import { BACKEND_URL } from "../script/GetData";
-import { useAuthContext } from "../Context/UserContext";
+import { usePartyContext } from "../Context/PartyContext";
+import { arrangeAllVotes } from "../script/ChartData"
+import { cacheTime } from "../script/GetData";
 
 ChartJS.register(BarElement, LinearScale, CategoryScale, Title, Tooltip, Legend);
 
-type VotesType = {
-  studentId: number;
-  panelCode: string;
-};
+
 
 const LiveResult: React.FC = () => {
 
 
-  const { user } = useAuthContext();
-  const [parties] = useState<string[]>(["KCSU", "CSF", "INSO", "ISO"]);
-  const [allVotes, setAllVotes] = useState<VotesType[]>([]);
-  const [votes, setVotes] = useState<number[]>([0, 0, 0, 0]);
+  const { fetchAllVotes, getPartyDetails } = usePartyContext();
+  const [parties, setParties] = useState<string[]>([]);
+  const [votes, setVotes] = useState<number[]>([]);
+  const [partiesColor, setPartiesColor] = useState<string[]>([]);
 
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     setVotes((prevVotes) =>
-  //       prevVotes.map((vote) => vote + Math.floor(Math.random() * 10) + 1)
-  //     );
-  //   }, 5000);
 
-  //   return () => clearInterval(intervalId);
-  // }, []);
 
   useEffect(() => {
-    const fetchAllVotes = async () => {
-      try {
-        const response = await fetch(`${BACKEND_URL}/votes/fetch-all-votes`, {
-           method : "GET",
-           headers : { 
-            "Authorization" : `Bearer ${user?.token}`
-           }
-        });
-        const result = await response.json();
-  
-        if (response.ok) {
-          setAllVotes(result.allVotes);
-          arrangeAllVotes(result.allVotes);
-        } else {
-          console.log(result.error);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+
+    const GetAllVotes = async () => {
+      const allvotes = await fetchAllVotes();
+      const partyData = await getPartyDetails();
+      SetpartyNames(partyData);
+      SetPartyColors(partyData);
+      const newvotes = arrangeAllVotes(partyData, allvotes);
+      setVotes(newvotes);
+
+      checkVotingTimes(intervalId);
+
     };
-  
-    fetchAllVotes(); 
-  
-    const intervalId = setInterval(fetchAllVotes, 5000); 
-    return () => clearInterval(intervalId); 
+
+    GetAllVotes();
+
+    const intervalId = setInterval(GetAllVotes, 5000);
+    return () => clearInterval(intervalId);
   }, []);
-  
 
-  function arrangeAllVotes(votesData: VotesType[]) {
-    const newVotes = [0, 0, 0, 0];
+  function checkVotingTimes(intervalId: any) {
+    if (Date.now() > cacheTime) {
+      clearInterval(intervalId);
+      return;
+    }
+  }
 
-    votesData.forEach((each) => {
-      const code = each.panelCode;
-
-      checkForPresidentPost(code[0], newVotes);
-      checkForVicePresidentPost(code[1], newVotes);
-      checkForGeneralPost(code[2], newVotes);
-      checkForJointSecretaryPost(code[3], newVotes);
+  function SetpartyNames(partyData: any) {
+    let partyNames: any = [];
+    partyData.map((each: any) => {
+      partyNames.push(each.partyName);
     });
-
-    setVotes(newVotes);
+    setParties(partyNames);
+    partyNames = [];
   }
 
-  function checkForPresidentPost(vote: string, newVotes: number[]) {
-    if (vote === "1") newVotes[2] += 1;
-    else if (vote === "2") newVotes[0] += 1;
-    else if (vote === "3") newVotes[1] += 1;
-    else if (vote === "4") newVotes[3] += 1;
-  }
-
-  function checkForVicePresidentPost(vote: string, newVotes: number[]) {
-    if (vote === "1") newVotes[2] += 1;
-    else if (vote === "2") newVotes[0] += 1;
-    else if (vote === "3") newVotes[3] += 1;
-    else if (vote === "4") newVotes[1] += 1;
-  }
-
-  function checkForGeneralPost(vote: string, newVotes: number[]) {
-    if (vote === "1") newVotes[0] += 1;
-    else if (vote === "2") newVotes[2] += 1;
-    else if (vote === "3") newVotes[1] += 1;
-    else if (vote === "4") newVotes[3] += 1;
-  }
-
-  function checkForJointSecretaryPost(vote: string, newVotes: number[]) {
-    if (vote === "1") newVotes[2] += 1;
-    else if (vote === "2") newVotes[1] += 1;
-    else if (vote === "3") newVotes[0] += 1;
-    else if (vote === "4") newVotes[3] += 1;
+  function SetPartyColors(partyData: any) {
+    let partyColors: any = [];
+    partyData.map((each: any) => {
+      partyColors.push(each.partyColor);
+    });
+    setPartiesColor(partyColors);
+    partyColors = [];
   }
 
   const data: ChartData<"bar"> = {
-    labels: ["KCSU", "CSF", "INSO", "ISO"],
+    labels: parties,
     datasets: [
       {
         label: "Votes",
         data: votes,
-        backgroundColor: ["rgb(43, 255, 43)", "rgb(255, 43, 43)", "rgb(3, 141, 12)", "rgb(187, 244, 17)"],
+        backgroundColor: partiesColor,
       },
     ],
   };
 
   const options = {
     responsive: true,
+
     scales: {
       y: { beginAtZero: true },
     },
   };
+
+
+
 
   return (
     <>
@@ -139,18 +106,36 @@ const LiveResult: React.FC = () => {
 
       <div className={styles.votingResultContainer}>
         <div className={styles.allPartiesVotes}>
-          <p>All Votes :</p>
-          {parties.map((each, index) => (
-            <div key={index} style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-              <span>{each} -{">"} </span>
-              <span style={{ color: "red" }}>{votes[index]} votes</span>
-            </div>
-          ))}
+          <h3>🗳️ All Votes</h3>
+          <table className={styles.voteTable}>
+            <tbody>
+              {parties.map((each, index) => {
+                const voteCount = votes[index];
+                let voteClass = styles.gray; // default
+
+                if (voteCount > 0) voteClass = styles.red;
+                if (voteCount >= 3) voteClass = styles.green;
+
+                return (
+                  <tr key={index}>
+                    <td>{each}</td>
+                    <td>
+                      <span className={`${styles.vote} ${voteClass}`}>
+                        {voteCount} {voteCount === 1 ? "vote" : "votes"}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
+
+
 
         <div className={styles.votingGraph}>
           <h2>Live Voting Result</h2>
-          <Bar data={data} options={options}  />
+          <Bar key={JSON.stringify(votes)} data={data} options={options} />
         </div>
       </div>
 

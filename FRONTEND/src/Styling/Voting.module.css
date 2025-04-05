@@ -1,15 +1,18 @@
 .votingContainer {
-  position: relative;
+  padding : 10px;
   top: 100px;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow-y: auto;
   background-color: white;
-  height: 1500px;
+  height : auto;
 }
 
 .votingBoxItems {
-  margin-top: 10px;
   gap : 20px;
+  width: 700px;
   height: 100%;
   padding: 0px 20px;
   display: flex;

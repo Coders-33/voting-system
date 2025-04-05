@@ -1,5 +1,5 @@
 .navBar {
-  position: absolute;
+
   color: white;
   background-color: transparent;
   display: flex;
@@ -8,7 +8,7 @@
 }
 
 .navBar #homeIconImage {
- 
+
   width: 70px;
   border-radius: 50%;
   cursor: pointer;
@@ -16,6 +16,7 @@
 
 
 .navLeftSideItems {
+
   display: flex;
   width: 50%;
   align-items: center;
@@ -39,7 +40,7 @@
   background-color: #422a70;
   color: white;
   font-weight: bold;
-  border-radius: 10px;
+  border-radius: 15px;
   padding: 5px 15px;
   transition: background-color 400ms;
 }
@@ -58,6 +59,7 @@
 }
 
 .bottomContainer {
+  background-color: #3edffff3;
   color: white;
   display: flex;
   flex-direction: column;
@@ -148,17 +150,14 @@ footer .footerItems img:hover {
   animation: bounce 4s ease-in-out infinite;
 }
 
-.ItemsinFooter {
-  border: 1px solid red;
-}
 
 
-.navBar #optionsLeft  {
+.navBar #optionsLeft {
   display: none;
- position: absolute;
- top : 10px;
- font-size: 1.5rem;
- left : 15px;
+  position: absolute;
+  top: 10px;
+  font-size: 1.5rem;
+  left: 15px;
 }
 
 
@@ -249,15 +248,22 @@ footer .footerItems img:hover {
   }
 }
 
+.spaceOccuppied {
+  height: 850px;
+  width: 100vw;
+}
+
 .bannerBackground {
   top: 0px;
+  position: absolute;
   z-index: -1;
   background-image: url("../images//bannerTop.png");
-  height: 800px;
-  width: 100%;
+  height: 900px;
+  width: 100vw;
+  margin-bottom: 20px;
   overflow: hidden;
   background-size: cover;
-  margin-bottom: 50px;
+  background-position: center;
   background-repeat: no-repeat;
 }
 
@@ -301,6 +307,9 @@ footer .footerItems img:hover {
 .partyInfoContainer {
   position: relative;
   display: flex;
+  font-size: 1.3rem;
+  font-weight: bolder;
+  font-style: oblique;
   flex-direction: column;
   gap: 40px;
   width: 100%;
@@ -331,28 +340,32 @@ footer .footerItems img:hover {
 
 .navBar #closeLeftBar {
   display: none;
-   position: absolute;
-   right : 10px;
-   top : 10px;
-   border : 1px solid rgba(255, 255, 255, 0.637);
-   padding : 5px;
-   border-radius: 50%;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.637);
+  padding: 5px;
+  border-radius: 50%;
 }
 
+hr  { 
+  color : #ffffff3b;
+}
 
-.profileOptionsContainer { 
+.profileOptionsContainer {
 
   position: absolute;
   display: flex;
   flex-direction: column;
-  gap : 10px;
-  padding : 10px;
+  gap: 10px;
+  padding: 20px;
   width: 200px;
-  background-color: rgba(27, 27, 27, 0.945);
-   top : 35px;
-   border-radius: 10px;
-  left : -180px;
-  height: 200px;
+  background-color: rgba(73, 73, 73, 0.948);
+  z-index: 10;
+  border-radius: 10px;
+  top: 46px;
+  left: -170px;
+  height: auto;
 
 }
 
@@ -361,8 +374,10 @@ footer .footerItems img:hover {
 
   .navBar {
 
+    height: 60px;
     display: flex;
-    height: 400px;
+    align-items: center;
+    z-index: 10;
     width: 100vw;
     justify-content: space-between;
     padding: 0px;
@@ -370,31 +385,34 @@ footer .footerItems img:hover {
 
   }
 
-  .navBar #optionsLeft   {
-     display: block;
-     margin-left: 5px;
-     cursor: pointer;
-   
+  .navBar #optionsLeft {
+    display: block;
+    margin-left: 5px;
+    cursor: pointer;
+
   }
 
-  .navBar #closeLeftBar   {
+  .navBar #closeLeftBar {
     display: block;
     cursor: pointer;
     transition: transform 200ms;
- }
+  }
 
-   .navBar #closeLeftBar:hover  {
-     transform: scale(1.1);
-     color : red;
-   }
+  .navBar #closeLeftBar:hover {
+    transform: scale(1.1);
+    color: red;
+  }
 
 
 
   .navBar .navLeftSideItems {
     display: flex;
+    z-index: 10;
+    height: 400px;
+    position: absolute;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-    height: inherit;
+    top: 1px;
     z-index: 1;
     flex-direction: column;
     background-color: #2c3e50;
@@ -404,17 +422,17 @@ footer .footerItems img:hover {
     width: 50%;
     align-items: center;
     margin-left: 0px;
-  }
+  } 
 
   .navBar .navRightSideItems {
     display: flex;
-    padding : 5px;
-    align-items: normal;
-    height: inherit;
-    align-items: flex-start;
+    width: 98vw;
+    padding: 0px;
     justify-content: flex-end;
-    width: 50%;
-    margin-right: 0px;
+    align-items: center;
+    margin-right: 18px;
+    height: inherit;
+
   }
 
   .navBar #homeIconImage {
@@ -426,26 +444,58 @@ footer .footerItems img:hover {
     height: 350px;
     width: 100%;
     background-size: cover;
+    margin-bottom: 0px;
+  }
+
+  .spaceOccuppied {
+     height: 300px;
   }
 
   #party1 {
+    border-top-left-radius: 60px;
+    border-bottom-left-radius: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     transform: translateX(0px);
   }
 
   #party2 {
+    border-top-right-radius: 60px;
+    border-bottom-right-radius: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     transform: translateX(0px);
   }
 
   #party3 {
+    border-top-left-radius: 60px;
+    border-bottom-left-radius: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     transform: translateX(0px);
   }
 
   #party4 {
+    border-top-right-radius: 60px;
+    border-bottom-right-radius: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     transform: translateX(0px);
   }
 
   .partyInfoContainer .eachPartyInfo {
     display: flex;
+    padding : 10px;
+    color : white;
+    font-size: 1.2rem;
     align-items: center;
     flex-direction: column;
   }

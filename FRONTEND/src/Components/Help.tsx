@@ -33,7 +33,6 @@ useEffect(() => {
         return value;
       }
     })?.[1];
-    console.log(response);
 
     
 

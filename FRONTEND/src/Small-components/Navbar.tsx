@@ -2,43 +2,46 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "../Styling/Dashboard.module.css";
 import logo from "../images/logo.jpeg";
 import { useNavigate } from "react-router-dom";
-import { cacheTime } from "../script/GetData"
+import { BACKEND_URL, cacheTime, clearCookies, startingTime } from "../script/GetData"
 import { ACTIONS, useAuthContext } from "../Context/UserContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faBars, faUser } from "@fortawesome/free-solid-svg-icons";
+import StudentProfile from "./StudentProfile";
 
 function Navbar() {
   const navigate = useNavigate();
 
   const [error, setError] = useState<string | null>(null);
-  const { user, dispatch } = useAuthContext();
+  const { user, admin, dispatch, setUserLoginStatus, setUserLoggedIn } = useAuthContext();
   const [leftSideBarEnable, setLeftSideBarEnable] = useState<boolean>(false);
   const leftBarRef = useRef<HTMLDivElement>(null);
   const [enableProfileOptions, setEnableProfileOptions] = useState<boolean>(false);
 
-const userIconStyle : any= {   
-   padding : "8px",
-   cursor :"pointer",
-   display : "flex",
-   alignItem : "center",
-   justifyContent : "center",
-   width : "20px",
-   height :"20px",
-   backgroundColor : "black",
-   borderRadius : "50%"
-}
+  const [viewStudentProfile, setViewStudentProfile] = useState<boolean>(false);
+
+  const userIconStyle: any = {
+    padding: "10px",
+    cursor: "pointer",
+    display: "flex",
+    alignItem: "center",
+    justifyContent: "center",
+    width: "26px",
+    height: "26px",
+    backgroundColor: "blue",
+    borderRadius: "50%"
+  }
 
   function checkVotingEnded() {
 
-    const currentTime = Date.now();
-    if (currentTime > cacheTime) return;
+    if (Date.now() < startingTime) return;
+    if (Date.now() > cacheTime) return;
 
     if (!user) {
       navigate("/login");
       return;
     }
 
-    navigate(`/voting/${user?.email}`);
+    navigate(`/voting/${user?.userId}`);
   }
 
   useEffect(() => {
@@ -65,55 +68,97 @@ const userIconStyle : any= {
 
   function handleLogoutUser() {
     dispatch({ type: ACTIONS.REMOVE_USER });
-    localStorage.removeItem("user-token");
+    setUserLoginStatus("FALSE");
+    setUserLoggedIn("FALSE");
+
+    clearCookies();
+    DeleteHttpCookie();
+  }
+
+
+  async function DeleteHttpCookie() {
+    const res = await fetch(`${BACKEND_URL}/auth/logout/?authName=user`, {
+      method: "POST",
+      credentials: "include"
+    });
+
+    if (res.ok) alert("Logout Successfully");
+
+  }
+
+  function OpenUserProfile(toogleValue: boolean) {
+
+    setViewStudentProfile(prev => !prev);
+    if (toogleValue) {
+      document.body.style.overflow = "hidden";
+    }
+    else {
+      document.body.style.overflowY = "auto";
+      document.body.style.overflowX = "hidden";
+    }
   }
 
 
 
   return (
 
-    <nav className={styles.navBar}>
+    <>
 
-      <FontAwesomeIcon onClick={() => setLeftSideBarEnable(true)} icon={faBars} id={styles.optionsLeft} />
+      {viewStudentProfile &&
+        <StudentProfile toogleView={OpenUserProfile} />
+      }
+      <nav className={styles.navBar}>
 
-      <div ref={leftBarRef} className={styles.navLeftSideItems}>
-        <FontAwesomeIcon onClick={() => setLeftSideBarEnable(false)} icon={faArrowLeft} id={styles.closeLeftBar} />
-        <img onClick={() => navigate("/")} src={logo} alt="" id={styles.homeIconImage} />
-        <span onClick={() => navigate("/about")} >About</span>
-        <span onClick={() => !user ? navigate("/login") : navigate("/live-result")} >Live Result</span>
-        <span onClick={() => navigate("/contact")}>Contact</span>
-        <span onClick={() => navigate("/help")}>Help</span>
-      </div>
+        <FontAwesomeIcon onClick={() => setLeftSideBarEnable(true)} icon={faBars} id={styles.optionsLeft} />
 
-      <div className={styles.navRightSideItems}>
-        <button onClick={checkVotingEnded}  >Vote now</button>
-        {
-          user ?
-
-            <div onClick={() => setEnableProfileOptions(prev => !prev)} style={{ position  : "relative" }} >
-              <FontAwesomeIcon icon={faUser} style={userIconStyle} />
-              {
-                enableProfileOptions &&
-
-                <div className={styles.profileOptionsContainer} >
-                  <p>Hi ,{user?.email.split("@")[0] || "User"} </p>
-                  <button>Account</button>
-                  <button onClick={handleLogoutUser} >Log out</button>
-                </div>
-
-              }
-            </div>
-
+        <div ref={leftBarRef} className={styles.navLeftSideItems}>
+          <FontAwesomeIcon onClick={() => setLeftSideBarEnable(false)} icon={faArrowLeft} id={styles.closeLeftBar} />
+          {!leftSideBarEnable ?
+            <img onClick={() => navigate("/")} src={logo} alt="" id={styles.homeIconImage} />
             :
+            <span onClick={function () {
+              navigate("/");
+              setLeftSideBarEnable(false);
+            }}>Home</span>
+          }
+          <span onClick={() => navigate("/about")} >About</span>
+          <span onClick={() => !user ? navigate("/login") : navigate("/live-result")} >Live Result</span>
+          <span onClick={() => !admin ? navigate("/admin-login") : navigate("/admin-access")} >Admin</span>
+          <span onClick={() => navigate("/contact")}>Contact</span>
+          <span onClick={() => navigate("/help")}>Help</span>
+        </div>
 
-            <button onClick={() => navigate("/login")} >Login</button>
-        }
+        <div className={styles.navRightSideItems}>
+          <button onClick={checkVotingEnded}  >Vote now</button>
+          {
+            user ?
 
-      </div>
+              <div onClick={() => setEnableProfileOptions(prev => !prev)} style={{ position: "relative" }} >
+                <FontAwesomeIcon icon={faUser} style={userIconStyle} />
+                {
+                  enableProfileOptions &&
 
-    </nav>
+                  <div className={styles.profileOptionsContainer} >
+                    <button onClick={() => OpenUserProfile(true)} >Account</button>
+                    <button onClick={handleLogoutUser} >Log out</button>
+                  </div>
 
+                }
+              </div>
+
+              :
+
+              <button onClick={() => navigate("/login")} >Login</button>
+          }
+
+        </div>
+
+      </nav>
+
+    </>
   );
+
+
 }
 
 export default Navbar;
