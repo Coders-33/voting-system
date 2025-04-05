@@ -88,7 +88,6 @@ export const commonQuestions = {
   "How to vote?": [
     "Can I change my vote after submission?",
     "What should I do if I face issues while voting?",
-    "Is there a deadline for voting?",
     "Can I vote using my mobile phone?",
   ],
   "Reset password": [
@@ -127,7 +126,6 @@ export const commonResponses = {
 
   "Can I change my vote after submission?": "Votes can't be changed once submitted.",
   "What should I do if I face issues while voting?": "Try refreshing the page. Contact support if needed.",
-  "Is there a deadline for voting?": "The voting deadline is [insert date]. Be sure to vote before then.",
   "Can I vote using my mobile phone?": "Yes, you can vote on mobile.",
 
   "Reset password": "Click 'Forgot Password' on the login page to reset via email.",
