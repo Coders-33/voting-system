@@ -83,3 +83,11 @@ h2 {
   flex-direction: column;
   padding: 10px;
 }
+
+
+@media (max-width : 700px) {
+  .container { 
+    width: 400px;
+
+  }
+}

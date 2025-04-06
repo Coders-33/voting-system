@@ -1,10 +1,15 @@
-export const BACKEND_URL = "http://192.168.1.3:5000";
+
+// for all device that are in current network
+export const BACKEND_URL = "http://192.168.1.5:5000";
+
+// only for the system 
 // export const BACKEND_URL = "http://localhost:5000";
 
 
 
 export let cacheTime: any = 0;
 export let startingTime: any = 0;
+export let endingTime: any = 0;
 
 
 
@@ -19,23 +24,34 @@ export type VotesType = {
 
 export async function GetVotingTimings() {
 
+
+  let times;
+  let startingTimeStamps = startingTime;
+  let endingTimeStamps = endingTime;
+  let differtime = startingTime + (endingTime - startingTime);
+
   try {
     const response = await fetch(`${BACKEND_URL}/admin/voting-times`, { method: "GET" });
     const result = await response.json();
-    if (response.ok) {
-      const times = result.timings;
-      const startingTimeStamps = new Date(times.startingTime).getTime();
-      const endingTimeStamps = new Date(times.endingTime).getTime();
 
-      const differtime = startingTimeStamps + (endingTimeStamps - startingTimeStamps);
+
+    if (result.timings) {
+      times = result.timings;
+      startingTimeStamps = new Date(times.startingTime).getTime();
+      endingTimeStamps = new Date(times.endingTime).getTime();
+
+      differtime = startingTimeStamps + (endingTimeStamps - startingTimeStamps);
       cacheTime = differtime;
       startingTime = startingTimeStamps;
-      return { startingTimeStamps, cacheTime };
+      endingTime = endingTimeStamps;
     }
+
+    return { startingTimeStamps, endingTimeStamps, cacheTime };
+
 
   }
   catch (error) {
-    return cacheTime;
+    return { startingTimeStamps, endingTimeStamps, cacheTime };
   }
 
 }
@@ -57,7 +73,6 @@ export async function EndVotings(): Promise<any> {
     return 'failed to clear timings!'
   }
 }
-
 
 
 export function clearCookies() {

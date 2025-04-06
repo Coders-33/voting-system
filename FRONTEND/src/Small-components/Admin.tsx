@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styles from "../Styling/Admin.module.css";
-import { BACKEND_URL, cacheTime, clearCookies, EndVotings } from '../script/GetData';
+import { BACKEND_URL, cacheTime, clearCookies, EndVotings, GetVotingTimings } from '../script/GetData';
 import { usePartyContext } from '../Context/PartyContext';
 import { Bar } from "react-chartjs-2";
 import { arrangeAllVotes } from '../script/ChartData';
@@ -46,32 +46,68 @@ function SetTimer() {
   const { admin, setAdminLoginStatus, dispatch, setAdminLoggedIn } = useAuthContext();
   const navigate = useNavigate();
 
+
+  const [START_TIME , setSTART_TIME] = useState<number>(0);
+  const [END_TIME , setEND_TIME] = useState<number>(0);
+
+
+
+useEffect(() => {
+   
+async function GetVotingTime() {
+  const data =   await GetVotingTimings(); 
+  
+  setSTART_TIME(data.startingTimeStamps);
+  setEND_TIME(data.endingTimeStamps);
+
+}
+
+GetVotingTime();
+
+} ,[])
+
   useEffect(() => {
 
-    const GetAllVotes = async () => {
-      const allvotes = await fetchAllVotes();
-      const partyData = await getPartyDetails();
-      SetpartyNames(partyData);
-      SetPartyColors(partyData);
-      const newvotes = arrangeAllVotes(partyData, allvotes);
-      setVotes(newvotes);
 
-      checkVotingTimes(intervalId);
+   
 
-    };
+    if (Date.now() > START_TIME && Date.now() < END_TIME) {
 
-    GetAllVotes();
-    const intervalId = setInterval(GetAllVotes, 5000);
-    return () => clearInterval(intervalId);
-  }, []);
+      // intially call 
+      GetAllVotes();
+
+
+      const intervalId = setInterval(async () => {
+        await GetAllVotes();
+        checkVotingTimes(intervalId);
+
+      }, 5000);
+
+      return () => clearInterval(intervalId);
+    }
+
+
+
+
+  }, [START_TIME , END_TIME]);
 
   function checkVotingTimes(intervalId: any) {
-    console.log("this is the cache time", cacheTime);
-    if (Date.now() > cacheTime) {
+    if (Date.now() > END_TIME) {
       clearInterval(intervalId);
-      return;
     }
   }
+
+
+  const GetAllVotes = async () => {
+    const allvotes = await fetchAllVotes();
+    const partyData = await getPartyDetails();
+    SetpartyNames(partyData);
+    SetPartyColors(partyData);
+    const newvotes = arrangeAllVotes(partyData, allvotes);
+    setVotes(newvotes);
+
+  };
+
 
   function SetpartyNames(partyData: any) {
     let partyNames: any = [];
@@ -253,6 +289,7 @@ function SetTimer() {
     clearCookies();
     dispatch({ type: ACTIONS.REMOVE_ADMIN });
     DeleteHttpCookie();
+    alert("Logout Successfully")
     navigate("/");
 
   }
@@ -296,7 +333,7 @@ function SetTimer() {
     <div className={styles.adminContainer}>
 
       <div style={{
-        display: 'flex', padding: "20px", borderBottom: "1px solid #ffffff3b"
+        display: 'flex', padding: "20px", borderBottom: "1px solid #ffffff3b", height: "auto"
         , width: "100vw", justifyContent: "space-around"
       }}>
         <h1>ADMIN PANEL</h1>
@@ -419,6 +456,7 @@ function SetTimer() {
         </div>
 
       </div>
+
     </div>
   )
 }

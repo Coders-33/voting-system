@@ -1,21 +1,22 @@
 .container {
-  max-width: 500px;
+width: 600px;
   margin: 50px auto;
   padding: 20px;
-  background: white;
+  color : white;
+  background: rgb(37, 37, 37);
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
   text-align: center;
-  color: #333;
+  color: #fff;
 }
 
 .contactInfo {
   text-align: center;
   margin-bottom: 20px;
-  color: #555;
+  color: #fff;
 }
 
 .contactInfo p {
@@ -70,4 +71,12 @@ h2 {
 
 .socialLinks a:hover {
   text-decoration: underline;
+}
+
+
+@media (max-width : 700px) {
+  .container { 
+    width: 400px;
+
+  }
 }

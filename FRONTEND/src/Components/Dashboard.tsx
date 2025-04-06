@@ -10,10 +10,11 @@ import FooterImage from "../images/footerImage.jpg";
 import Footer from "./Footer";
 
 import { Images } from "../script/GetImages";
-import { GetVotingTimings, startingTime as startTime, cacheTime } from "../script/GetData";
+import { GetVotingTimings } from "../script/GetData";
 import { useEffect, useRef, useState } from "react";
 import Navbar from "../Small-components/Navbar";
 import Preloader from "../Small-components/PreLoader";
+import { formatTimings } from "../script/FormatTime";
 
 
 let intervalId: any;
@@ -24,33 +25,101 @@ function Dashboard() {
   const [leftSeconds, setLeftSeconds] = useState<number>(0);
   const [maxTime, setMaxTime] = useState<number>(0);
   const [startingTime, setStartingTime] = useState<number>(0);
+  const [voteEndTime, setEndTime] = useState<number>(0);
   const [scrollAmount, setScrollAmount] = useState<number>(0);
+
+  const [votingDate, setVotingDate] = useState<{ date: string, hours: any }>({ date: "", hours: "" });
 
   const partyRef1 = useRef<HTMLDivElement>(null);
   const partyRef2 = useRef<HTMLDivElement>(null);
   const partyRef3 = useRef<HTMLDivElement>(null);
   const partyRef4 = useRef<HTMLDivElement>(null);
-  // dashboard intially false
+
   const [showMain, setShowMain] = useState(false);
 
+
+  const localStyles: any = {
+
+    NOT_STARTED: {
+      fontWeight: "bolder",
+      display: "flex",
+      fontFamily: "Arial , Helvetica , sans-serif",
+      fontSize: "2rem",
+      color: "black",
+      flexDirection: "column",
+      alignItems: "center",
+      marginTop: "20px",
+    },
+
+    VOTING_END: {
+      fontWeight: "bolder",
+      display: "flex",
+      fontSize: "2rem",
+      color: 'white',
+      flexDirection: "column",
+      alignItems: "center",
+      gap: "30px",
+      marginTop: "20px",
+    },
+
+    VOTE_NOW: {
+      fontWeight: "bolder",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: "30px",
+      marginTop: "20px",
+    },
+
+    VOTING_ENDS_IN: {
+      fontSize: "2rem", color: 'red', display: "flex",
+      justifyContent: "center", gap: "5px",
+      alignItems: "center", flexWrap: "wrap"
+    }
+
+
+  }
+
+  // LOADER FOR LOADING COMPONENTS
   useEffect(() => {
     const timer = setTimeout(() => {
-      // true  after two seconds
       setShowMain(true);
     }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
 
+
+  // GETTING VOTE TIMES FROM BACKEND
   useEffect(() => {
-    if (maxTime > 0) {
+
+    async function getTimings() {
+      const times = await GetVotingTimings();
+      setEndTime(times.endingTimeStamps);
+      setMaxTime(times.cacheTime);
+      setStartingTime(times.startingTimeStamps);
+      const timeData = formatTimings(times.startingTimeStamps);
+      setVotingDate({
+        date: timeData.votingDateTimes,
+        hours: timeData.formatedHours,
+
+      })
+    }
+
+    getTimings();
+  }, []);
+
+
+  // START THE TIMER ONCE YOU GET IT 
+  useEffect(() => {
+    if (voteEndTime > 0) {
       intervalId = setInterval(() => {
         Timer();
       }, 1000);
     }
 
     return () => clearInterval(intervalId);
-  }, [maxTime]);
+  }, [voteEndTime]);
 
 
   useEffect(() => {
@@ -61,24 +130,8 @@ function Dashboard() {
     };
   }, []);
 
-  useEffect(() => {
 
-    async function getTimings() {
-      const times = await GetVotingTimings();
-      setMaxTime(times.cacheTime);
-      setStartingTime(times.startingTimeStamps);
-    }
-
-    if (cacheTime != 0 && startTime != 0) {
-      setMaxTime(cacheTime);
-      setStartingTime(startTime);
-      return;
-    }
-    getTimings();
-  }, []);
-
-
-  // parties slider left right
+  // PARTIES SHOW ANIMATION 
   function handleOnWindowScroll() {
     if (window.scrollY > 454) {
       if (partyRef1.current) {
@@ -107,6 +160,8 @@ function Dashboard() {
     setScrollAmount(Math.floor(window.scrollY));
   }
 
+
+   // TIME FORMATING 
   function Timer() {
     const currentTime = Date.now();
     const calTime = maxTime - currentTime;
@@ -150,60 +205,31 @@ function Dashboard() {
             <div className={styles.spaceOccuppied}></div>
 
             <div className={styles.bottomContainer}>
-              {/* vote now image */}
 
+              {/* VOTE NOW TIMER  */}
               {
                 Date.now() < startingTime ?
 
-                  <div
-                    style={{
-                      fontWeight: "bolder",
-                      display: "flex",
-                      fontSize: "2rem",
-                      color: "white",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      gap: "30px",
-                      marginTop: "20px",
-                    }}
-                  >THE VOTING HAS'NT STARTED YET</div>
+                  // IF VOTING START SOON 
+                  <div style={localStyles.NOT_STARTED}>
+                    <p>Voting Starts on</p>
+                    <p>{votingDate?.date} at {votingDate.hours}</p>
+                  </div>
                   :
 
                   <div>
                     {
-                      Date.now() > maxTime ?
+                      Date.now() > voteEndTime ?
 
-                        <div
-                          style={{
-                            fontWeight: "bolder",
-                            display: "flex",
-                            fontSize: "2rem",
-                            color: 'white',
-                            flexDirection: "column",
-                            alignItems: "center",
-                            gap: "30px",
-                            marginTop: "20px",
-                          }}
-                        >VOTING ENDED</div>
+                        // IF VOTING ENDED 
+                        <div style={localStyles.VOTING_END}>VOTING ENDED</div>
 
                         :
 
-                        <div
-                          style={{
-                            fontWeight: "bolder",
-                            display: "flex",
-                            flexDirection: "column",
-                            alignItems: "center",
-                            gap: "30px",
-                            marginTop: "20px",
-                          }}
-                        >
+                        // VOTE TIMER BINKING 
+                        <div style={localStyles.VOTE_NOW}>
                           <img src={voteNow} alt="" id={styles.voteNow} />
-                          <p style={{
-                            fontSize: "2rem", color: 'red', display: "flex",
-                            justifyContent: "center", gap: "5px",
-                            alignItems: "center", flexWrap: "wrap"
-                          }}>
+                          <p style={localStyles.VOTING_ENDS_IN}>
                             <span style={{ color: "white" }} >Voting End's In :</span>
                             <span  >
                               {formatTime(leftHours)} hr {formatTime(leftMinutes)} min{" "}

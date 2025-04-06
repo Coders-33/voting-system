@@ -133,6 +133,20 @@ export function AuthContextProvider({ children }: AuthContextProviderType) {
             }
 
         }
+
+
+        if (userLoggedIn == "TRUE") {
+            CheckAndValidateUserToken();
+        }
+
+
+
+
+    }, [userLoggedIn]);
+
+
+    useEffect(() => {
+
         async function CheckAndValidateAdminToken() {
 
             // check by the server verify token 
@@ -167,16 +181,11 @@ export function AuthContextProvider({ children }: AuthContextProviderType) {
 
         }
 
-        if (userLoggedIn == "TRUE") {
-            CheckAndValidateUserToken();
-        }
-
         if (adminLoggedIn == "TRUE") {
             CheckAndValidateAdminToken();
         }
 
-
-    }, [userLoggedIn]);
+    }, [adminLoggedIn])
 
 
     function setUserLoginStatus(status: string) {
@@ -199,6 +208,7 @@ export function AuthContextProvider({ children }: AuthContextProviderType) {
 
     function getAdminLoginStatus() {
         const status = localStorage.getItem("AdminloggedIn");
+        console.log("getting admine status", status);
         if (status) {
             setAdminLoggedIn(status);
         }

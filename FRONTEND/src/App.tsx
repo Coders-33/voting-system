@@ -11,8 +11,9 @@ import { useAuthContext } from "./Context/UserContext"
 import Admin from "./Small-components/Admin"
 import About from "./Components/About"
 import AdminLogin from "./Components/AdminLogin"
-import { startingTime } from "./script/GetData"
+import { cacheTime, endingTime, startingTime } from "./script/GetData"
 import NotFound from "./Small-components/NotFound"
+import ElectionResult from "./Components/ElectionResult"
 
 function App() {
 
@@ -28,13 +29,14 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/help" element={<Help />} />
-          <Route path="/live-result" element={user ? <LiveResult /> : <Login />} />
-          {Date.now() > startingTime && <Route path="/voting/:id" element={user ? <Voting /> : <Login />} />}
+          {Date.now() > startingTime && <Route path="/live-result" element={user ? <LiveResult /> : <Login />} />}
+          {Date.now() > startingTime && Date.now() < endingTime && <Route path="/voting/:id" element={user ? <Voting /> : <Login />} />}
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/admin-access" element={admin ? <Admin /> : <AdminLogin />} />
           <Route path="/rs/:id1/:id2" element={<ResetPassword />} />
           <Route path="/about" element={<About />} />
           <Route path="/admin-login" element={admin ? <Admin /> : <AdminLogin />} />
+          {Date.now() > endingTime && <Route path="/election-result" element={<ElectionResult />} />}
           <Route path="*" element={<NotFound />} />
 
 

@@ -4,6 +4,7 @@ import { GenerateToken } from "../authentication/authenticate";
 import crypto from "crypto";
 import fs from "node:fs";
 import path from "node:path";
+import votesDoc from "../models/votesDoc";
 
 const timerPath = path.resolve(path.join(__dirname, "votingTiming.json"));
 
@@ -55,43 +56,53 @@ async function AdminLogin(req: Request, res: Response) {
 
 async function handleAddNewParty(req: Request, res: Response) {
 
-    const { partyName,
-        partyColor,
-        presidentName,
-        vicePresidentName,
-        generalSecretaryName,
-        jointSecretaryName,
-        panelCode
-    } = req.body;
-
-
-    if (!partyName || !partyColor || !presidentName || !vicePresidentName
-        || !jointSecretaryName || !panelCode || !generalSecretaryName) {
-        res.status(404).json({ error: "Fields can't be empty provide full info !" });
-        return;
-    }
-
-
-    const data = {
-        partyName,
-        partyColor,
-        CandiateNames: [presidentName, vicePresidentName, generalSecretaryName, jointSecretaryName],
-        panelCode
-    }
 
     try {
-        const query = {
-            $or: [
-                { partyName: partyName },
-                { panelCode: panelCode }
-            ]
-        };
 
-        const check: any = await partyListDoc.find(query);
-        if (check != "") {
-            res.status(404).json({ error: "Duplicate Parties not allowed!" });
+        const { partyName,
+            partyColor,
+            presidentName,
+            vicePresidentName,
+            generalSecretaryName,
+            jointSecretaryName,
+            panelCode
+        } = req.body;
+
+
+        if (!partyName || !partyColor || !presidentName || !vicePresidentName
+            || !jointSecretaryName || !panelCode || !generalSecretaryName) {
+            res.status(404).json({ error: "Fields can't be empty provide full info !" });
             return;
         }
+
+
+
+        const data = {
+            partyName,
+            partyColor,
+            CandiateNames: [presidentName, vicePresidentName, generalSecretaryName, jointSecretaryName],
+            panelCode
+        }
+
+       
+        const check: any = await partyListDoc.find({partyName});
+
+        if (check.length > 0 || check != "") {
+            console.log(check);
+            res.status(404).json({ error: "Duplicate Parties are not Allowed!" });
+            return;
+        }
+        
+
+
+         const duplicacy = await checkForDuplictePanel(panelCode);
+        if (duplicacy) {
+            res.status(404).json({ error: "Duplicate Panel Codes are not Allowed!" });
+            return;
+        }
+
+
+
         const party = await partyListDoc.create(data);
         if (!party) {
             res.status(404).json({ error: "failed to add party" });
@@ -200,17 +211,30 @@ export async function handleUpdateVotingTimes(req: Request, res: Response) {
         }
     });
 
+
+    await clearPreviousVotings();
     res.status(202).json({ message: "Timings Updated!" });
 
 
 
 }
 
+
+async function clearPreviousVotings() {
+    try {
+        const allvotes = await votesDoc.deleteMany({});
+        console.log(allvotes);
+    }
+    catch (error) {
+        console.log(error);
+    }
+}
+
 export function handleEndVotings(req: Request, res: Response) {
 
     const timeData = {
-        startingTime: Date.now(),
-        endingTime: Date.now()
+        startingTime: 0,
+        endingTime: 0
     }
 
     fs.writeFile(timerPath, JSON.stringify(timeData), (error) => {
@@ -220,7 +244,7 @@ export function handleEndVotings(req: Request, res: Response) {
         }
     });
 
-    res.status(200).json({ msg: "voting time cleared!" })
+    res.status(200).json({ msg: "voting time cleared!" });
 
 }
 
@@ -240,6 +264,40 @@ export async function handleGetVotingTimes(req: Request, res: Response) {
 }
 
 
+
+async function checkForDuplictePanel(panelCode: string): Promise<Boolean> {
+
+
+    let duplicatePanel: boolean = false;
+
+    try {
+
+
+        const allPanels = await partyListDoc.find({}, { _id: 0, panelCode: 1 });
+
+        outerLoop:
+        for (const each of allPanels) {
+            const code = each.panelCode;
+
+            for (let i = 0; i < panelCode.length; i++) {
+                if (panelCode[i] == code[i]) {
+                    duplicatePanel = true;
+                    break outerLoop;
+                }
+            }
+        }
+
+
+    }
+    catch (error) {
+        return duplicatePanel;
+    }
+
+    return duplicatePanel;
+
+
+
+}
 
 
 function SaltedPassword(password: string) {

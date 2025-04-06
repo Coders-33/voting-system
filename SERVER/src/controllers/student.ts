@@ -74,7 +74,7 @@ export async function handleStudentLogin(req: Request, res: Response): Promise<v
         const loginData = {
             userId: candiate._id,
             token: token,
-        studentName : candiate.studentName,
+            studentName: candiate.studentName,
             email: candiate.email
         }
 
@@ -280,6 +280,39 @@ export async function handleChangePasscode(req: Request, res: Response): Promise
 
 }
 
+
+export async function handleStudentQuery(req: Request, res: Response) {
+    try {
+
+        const { name, email, message } = req.body;
+
+        if (!email || !message) {
+            res.status(404).json({ error: "query rejected!" });
+            return;
+        }
+
+        const mailOptions = {
+            from: `"${name}" <${process.env.EMAIL_USER}>`,
+            to: process.env.EMAIL_USER, // your own inbox
+            subject: `Student Query from ${name}`,
+            text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+            replyTo: email 
+        };
+
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                res.status(505).json({ error: "Failed to Send OTP" })
+                return;
+            }
+        });
+
+        res.status(202).json({ msg: "Query Sended Successfully!" });
+    }
+    catch (error) {
+        res.status(505).json({ error });
+    }
+}
 
 
 

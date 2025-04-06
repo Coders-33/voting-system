@@ -1,9 +1,9 @@
 .adminContainer {
      color: white;
-    
      width: 100vw;
-     height: 1500px;
+     height: 100vh;
      overflow-x: hidden;
+     gap : 20px;
      overflow-y: auto;
      display: flex;
      flex-direction: column;
@@ -17,7 +17,7 @@
      gap: 50px;
      flex-wrap: wrap;
      justify-content: center;
-     height: 1200px;
+     height: auto;
 }
 
 .updateVotingTimes {
@@ -98,5 +98,6 @@ button:hover {
 .votingChart { 
      padding :20px;
      width: 500px;
+     height: 400px;
      
 }

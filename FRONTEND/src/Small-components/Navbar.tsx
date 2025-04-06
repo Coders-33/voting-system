@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "../Styling/Dashboard.module.css";
 import logo from "../images/logo.jpeg";
 import { useNavigate } from "react-router-dom";
-import { BACKEND_URL, cacheTime, clearCookies, startingTime } from "../script/GetData"
+import { BACKEND_URL, cacheTime, clearCookies, endingTime, startingTime } from "../script/GetData"
 import { ACTIONS, useAuthContext } from "../Context/UserContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faBars, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -34,7 +34,7 @@ function Navbar() {
   function checkVotingEnded() {
 
     if (Date.now() < startingTime) return;
-    if (Date.now() > cacheTime) return;
+    if (Date.now() > endingTime) return;
 
     if (!user) {
       navigate("/login");
@@ -99,6 +99,19 @@ function Navbar() {
   }
 
 
+   function liveResult() {
+
+     if(Date.now() < startingTime) {
+       return;
+      }
+      if(Date.now() > cacheTime) {
+          return;
+      }
+    !user ? navigate("/login") : navigate("/live-result");
+     
+
+   }
+
 
   return (
 
@@ -122,10 +135,16 @@ function Navbar() {
             }}>Home</span>
           }
           <span onClick={() => navigate("/about")} >About</span>
-          <span onClick={() => !user ? navigate("/login") : navigate("/live-result")} >Live Result</span>
+          <span onClick={liveResult} >Live Result</span>
           <span onClick={() => !admin ? navigate("/admin-login") : navigate("/admin-access")} >Admin</span>
           <span onClick={() => navigate("/contact")}>Contact</span>
           <span onClick={() => navigate("/help")}>Help</span>
+          <span onClick={() =>  {
+             if(Date.now() < cacheTime) {
+               return;
+             }
+             navigate("/election-result");
+          }} >Election Result</span>
         </div>
 
         <div className={styles.navRightSideItems}>

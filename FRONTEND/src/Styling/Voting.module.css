@@ -12,10 +12,12 @@
 
 .votingBoxItems {
   gap : 20px;
-  width: 700px;
+  width: 70vw;
   height: 100%;
   padding: 0px 20px;
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
   height: auto;
 }
@@ -187,11 +189,38 @@ justify-content: center;
 }
 
 
+.boxContainer {
+ display: flex;
+ justify-content: space-between;
+ width: 70%;  
+}
 
-@media (max-width : 700px) { 
+
+#innerBoxs  {
+   width: 45%;
+}
+
+
+
+@media (max-width : 1250px) { 
 
   .verificationBox {
     width: 350px;  
   }
+
+  .boxContainer { 
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+  }
+
+
+  #innerBoxs {
+     width: 80%;
+  }
+
+
 
 }

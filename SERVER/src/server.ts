@@ -27,6 +27,14 @@ export const transporter = nodemailer.createTransport({
 });
 
 
+const localurl = process.env.LOCAL_URL;
+const networkurl = process.env.NETWORK_URL;
+let allowedOrigins: any = [];
+if (localurl || networkurl) {
+    allowedOrigins = [localurl, networkurl];
+}
+
+
 function createAndStartServer() {
 
     const PORT = process.env.PORT;
@@ -34,10 +42,7 @@ function createAndStartServer() {
     const app = express();
     const server = http.createServer(app);
 
-    const allowedOrigins = [
-        "http://localhost:5173",
-        "http://192.168.1.3:5173",
-    ];
+
 
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));

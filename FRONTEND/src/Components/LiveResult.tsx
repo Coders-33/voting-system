@@ -15,7 +15,8 @@ import styles from "../Styling/LiveResult.module.css";
 import Navbar from "../Small-components/Navbar";
 import { usePartyContext } from "../Context/PartyContext";
 import { arrangeAllVotes } from "../script/ChartData"
-import { cacheTime } from "../script/GetData";
+import { cacheTime, startingTime } from "../script/GetData";
+import { useNavigate } from "react-router-dom";
 
 ChartJS.register(BarElement, LinearScale, CategoryScale, Title, Tooltip, Legend);
 
@@ -28,7 +29,8 @@ const LiveResult: React.FC = () => {
   const [parties, setParties] = useState<string[]>([]);
   const [votes, setVotes] = useState<number[]>([]);
   const [partiesColor, setPartiesColor] = useState<string[]>([]);
-
+ 
+  const navigate = useNavigate();
 
 
   useEffect(() => {
@@ -95,7 +97,10 @@ const LiveResult: React.FC = () => {
     },
   };
 
-
+if(Date.now() < startingTime || Date.now() > cacheTime) { 
+ navigate("/");
+ return;
+}
 
 
   return (

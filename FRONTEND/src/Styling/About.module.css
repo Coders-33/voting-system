@@ -47,3 +47,11 @@
     border-radius: 5px;
   }
   
+
+  @media (max-width : 700px) {
+    
+     .container  {
+       max-width: 400px;
+     }
+
+  }

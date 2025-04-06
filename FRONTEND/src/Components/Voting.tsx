@@ -191,6 +191,7 @@ function Voting() {
 
     const votingData = {
       studentId: DATA_studentid,
+      studentEmail : user?.email,
       panelCode: panelcode
     }
 
@@ -379,210 +380,219 @@ function Voting() {
       <Navbar />
 
       <div className={styles.votingContainer}>
-        {allParties != null ? <div className={styles.votingBoxItems}>
-          <div>
-            <p id={styles.CandidatePost}>PRESIDENT</p>
-            <div className={styles.eachSectionCandidate}>
+        {allParties != null ?
+          <div className={styles.votingBoxItems}>
 
-              {allParties.presidents.map((each: any, index: any) => (
-                <label key={index} className={styles.eachInfoSection}>
-                  <input
-                    type="radio"
-                    className={styles.hiddenRadio}
-                    value={each.Name}
-                    name="presidentPost"
-                    checked={selectedPresident == each.Name}
-                    onChange={() =>
-                      SelectPresidentAndCode(each.Name, each.Position)
-                    }
-                  />
-                  <span className={styles.customRadioBtn}></span>
-                  <span>( {each.Position} )</span>
-                  <span
-                    style={{
-                      fontWeight:
-                        selectedPresident == each.Name ? "bolder" : "normal",
-                      transform:
-                        selectedPresident == each.Name ? "scale(1.4)" : "none",
-                      transition: "transform 200ms",
-                    }}
-                  >
-                    {each.Name}
-                  </span>
-                </label>
-              ))}
+            <div className={styles.boxContainer}>
+
+              <div id={styles.innerBoxs}>
+                <p id={styles.CandidatePost}>PRESIDENT</p>
+                <div className={styles.eachSectionCandidate}>
+
+                  {allParties.presidents.map((each: any, index: any) => (
+                    <label key={index} className={styles.eachInfoSection}>
+                      <input
+                        type="radio"
+                        className={styles.hiddenRadio}
+                        value={each.Name}
+                        name="presidentPost"
+                        checked={selectedPresident == each.Name}
+                        onChange={() =>
+                          SelectPresidentAndCode(each.Name, each.Position)
+                        }
+                      />
+                      <span className={styles.customRadioBtn}></span>
+                      <span>( {each.Position} )</span>
+                      <span
+                        style={{
+                          fontWeight:
+                            selectedPresident == each.Name ? "bolder" : "normal",
+                          transform:
+                            selectedPresident == each.Name ? "scale(1.4)" : "none",
+                          transition: "transform 200ms",
+                        }}
+                      >
+                        {each.Name}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div id={styles.innerBoxs} >
+                <p id={styles.CandidatePost}>GENERAL SECRETARY</p>
+                <div className={styles.eachSectionCandidate}>
+                  {allParties.generalSecretaries.map((each: any, index: any) => (
+                    <label key={index} className={styles.eachInfoSection}>
+                      <input
+                        type="radio"
+                        className={styles.hiddenRadio}
+                        value={each.Name}
+                        name="generalSecPost"
+                        checked={selectedGeneralSect == each.Name}
+                        onChange={() =>
+                          SelectedGeneralSecAndCode(each.Name, each.Position)
+                        }
+                      />
+                      <span className={styles.customRadioBtn}></span>
+                      <span>( {each.Position} )</span>
+                      <span
+                        style={{
+                          fontWeight:
+                            selectedGeneralSect == each.Name ? "bolder" : "normal",
+                          transform:
+                            selectedGeneralSect == each.Name
+                              ? "scale(1.4)"
+                              : "none",
+                          transition: "transform 200ms",
+                        }}
+                      >
+                        {each.Name}
+                      </span>
+                    </label>
+                  ))}
+
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div>
-            <p id={styles.CandidatePost}>VICE PRESIDENT</p>
-            <div className={styles.eachSectionCandidate}>
-              {allParties.vicePresidents.map((each: any, index: any) => (
-                <label key={index} className={styles.eachInfoSection}>
-                  <input
-                    type="radio"
-                    className={styles.hiddenRadio}
-                    value={each.Name}
-                    name="vicePresidentPost"
-                    checked={selectedVicePresident == each.Name}
-                    onChange={() =>
-                      SelectedVicePresAndCode(each.Name, each.Position)
-                    }
-                  />
-                  <span className={styles.customRadioBtn}></span>
-                  <span>( {each.Position} )</span>
-                  <span
-                    style={{
-                      fontWeight:
-                        selectedVicePresident == each.Name
-                          ? "bolder"
-                          : "normal",
-                      transform:
-                        selectedVicePresident == each.Name
-                          ? "scale(1.4)"
-                          : "none",
-                      transition: "transform 200ms",
-                    }}
-                  >
-                    {each.Name}
-                  </span>
-                </label>
-              ))}
+            <div className={styles.boxContainer}>
+           
+              <div id={styles.innerBoxs} >
+                <p id={styles.CandidatePost}>VICE PRESIDENT</p>
+                <div className={styles.eachSectionCandidate}>
+                  {allParties.vicePresidents.map((each: any, index: any) => (
+                    <label key={index} className={styles.eachInfoSection}>
+                      <input
+                        type="radio"
+                        className={styles.hiddenRadio}
+                        value={each.Name}
+                        name="vicePresidentPost"
+                        checked={selectedVicePresident == each.Name}
+                        onChange={() =>
+                          SelectedVicePresAndCode(each.Name, each.Position)
+                        }
+                      />
+                      <span className={styles.customRadioBtn}></span>
+                      <span>( {each.Position} )</span>
+                      <span
+                        style={{
+                          fontWeight:
+                            selectedVicePresident == each.Name
+                              ? "bolder"
+                              : "normal",
+                          transform:
+                            selectedVicePresident == each.Name
+                              ? "scale(1.4)"
+                              : "none",
+                          transition: "transform 200ms",
+                        }}
+                      >
+                        {each.Name}
+                      </span>
+                    </label>
+                  ))}
 
+                </div>
+              </div>
+
+              <div id={styles.innerBoxs}>
+                <p id={styles.CandidatePost}>JOINT SECRETARY</p>
+                <div className={styles.eachSectionCandidate}>
+                  {allParties.jointSecretaries.map((each: any, index: any) => (
+                    <label key={index} className={styles.eachInfoSection}>
+                      <input
+                        type="radio"
+                        className={styles.hiddenRadio}
+                        value={each.Name}
+                        name="joinSecPost"
+                        checked={selectedJoinSect == each.Name}
+                        onChange={() =>
+                          SelectedJoinSecAndCode(each.Name, each.Position)
+                        }
+                      />
+                      <span className={styles.customRadioBtn}></span>
+                      <span>( {each.Position} )</span>
+                      <span
+                        style={{
+                          fontWeight:
+                            selectedJoinSect == each.Name ? "bolder" : "normal",
+                          transform:
+                            selectedJoinSect == each.Name ? "scale(1.4)" : "none",
+                          transition: "transform 200ms",
+                        }}
+                      >
+                        {each.Name}
+                      </span>
+                    </label>
+                  ))}
+
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div>
-            <p id={styles.CandidatePost}>GENERAL SECRETARY</p>
-            <div className={styles.eachSectionCandidate}>
-              {allParties.generalSecretaries.map((each: any, index: any) => (
-                <label key={index} className={styles.eachInfoSection}>
-                  <input
-                    type="radio"
-                    className={styles.hiddenRadio}
-                    value={each.Name}
-                    name="generalSecPost"
-                    checked={selectedGeneralSect == each.Name}
-                    onChange={() =>
-                      SelectedGeneralSecAndCode(each.Name, each.Position)
-                    }
-                  />
-                  <span className={styles.customRadioBtn}></span>
-                  <span>( {each.Position} )</span>
-                  <span
-                    style={{
-                      fontWeight:
-                        selectedGeneralSect == each.Name ? "bolder" : "normal",
-                      transform:
-                        selectedGeneralSect == each.Name
-                          ? "scale(1.4)"
-                          : "none",
-                      transition: "transform 200ms",
-                    }}
-                  >
-                    {each.Name}
-                  </span>
-                </label>
-              ))}
-
-            </div>
-          </div>
-
-          <div>
-            <p id={styles.CandidatePost}>JOINT SECRETARY</p>
-            <div className={styles.eachSectionCandidate}>
-              {allParties.jointSecretaries.map((each: any, index: any) => (
-                <label key={index} className={styles.eachInfoSection}>
-                  <input
-                    type="radio"
-                    className={styles.hiddenRadio}
-                    value={each.Name}
-                    name="joinSecPost"
-                    checked={selectedJoinSect == each.Name}
-                    onChange={() =>
-                      SelectedJoinSecAndCode(each.Name, each.Position)
-                    }
-                  />
-                  <span className={styles.customRadioBtn}></span>
-                  <span>( {each.Position} )</span>
-                  <span
-                    style={{
-                      fontWeight:
-                        selectedJoinSect == each.Name ? "bolder" : "normal",
-                      transform:
-                        selectedJoinSect == each.Name ? "scale(1.4)" : "none",
-                      transition: "transform 200ms",
-                    }}
-                  >
-                    {each.Name}
-                  </span>
-                </label>
-              ))}
-
-            </div>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <p
+            <div
               style={{
                 display: "flex",
-                justifyContent: "center",
-                gap: "10px",
+                flexDirection: "column",
                 alignItems: "center",
-                fontWeight: "bolder",
-                fontSize: "2rem",
               }}
             >
-              <span> PANEL CODE -</span>
-              <span style={{ color: "red", display: "flex", gap: "6px" }}>
-                <span
-                  style={{
-                    padding: "5px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {presidentCode}
+              <p
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "10px",
+                  alignItems: "center",
+                  fontWeight: "bolder",
+                  fontSize: "2rem",
+                }}
+              >
+                <span> PANEL CODE -</span>
+                <span style={{ color: "red", display: "flex", gap: "6px" }}>
+                  <span
+                    style={{
+                      padding: "5px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    {presidentCode}
+                  </span>
+                  <span
+                    style={{
+                      padding: "5px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    {vicePresidentCode}
+                  </span>
+                  <span
+                    style={{
+                      padding: "5px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    {generalSecetCode}
+                  </span>
+                  <span
+                    style={{
+                      padding: "5px",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    {jointSecetCode}
+                  </span>
                 </span>
-                <span
-                  style={{
-                    padding: "5px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {vicePresidentCode}
-                </span>
-                <span
-                  style={{
-                    padding: "5px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {generalSecetCode}
-                </span>
-                <span
-                  style={{
-                    padding: "5px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  {jointSecetCode}
-                </span>
-              </span>
-            </p>
-            <button onClick={HandleOnSubmitVote}
-              className={styles.SubmitVote}>Submit Vote</button>
-            <div>
-              {error && <p style={{ color: 'red' }}>{error}</p>}
-              {message && <p style={{ color: 'greens' }} >{message}</p>}
+              </p>
+              <button onClick={HandleOnSubmitVote}
+                className={styles.SubmitVote}>Submit Vote</button>
+              <div>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {message && <p style={{ color: 'greens' }} >{message}</p>}
+              </div>
             </div>
+
           </div>
-        </div>
           :
           <div>CANDIDATES OR MEMBERS ARE NOT ADDED YET</div>
         }
