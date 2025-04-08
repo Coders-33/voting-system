@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styles from "../Styling/Admin.module.css";
-import { BACKEND_URL, cacheTime, clearCookies, EndVotings, GetVotingTimings } from '../script/GetData';
+import { BACKEND_URL,  clearCookies, EndVotings  } from '../script/GetData';
 import { usePartyContext } from '../Context/PartyContext';
 import { Bar } from "react-chartjs-2";
 import { arrangeAllVotes } from '../script/ChartData';
@@ -46,30 +46,31 @@ function SetTimer() {
   const { admin, setAdminLoginStatus, dispatch, setAdminLoggedIn } = useAuthContext();
   const navigate = useNavigate();
 
+  const { START_TIME, END_TIME } = useAuthContext();
 
-  const [START_TIME , setSTART_TIME] = useState<number>(0);
-  const [END_TIME , setEND_TIME] = useState<number>(0);
+  // const [START_TIME, setSTART_TIME] = useState<number>(0);
+  // const [END_TIME, setEND_TIME] = useState<number>(0);
 
 
 
-useEffect(() => {
-   
-async function GetVotingTime() {
-  const data =   await GetVotingTimings(); 
-  
-  setSTART_TIME(data.startingTimeStamps);
-  setEND_TIME(data.endingTimeStamps);
+  // useEffect(() => {
 
-}
+  //   async function GetVotingTime() {
+  //     const data = await GetVotingTimings();
 
-GetVotingTime();
+  //     setSTART_TIME(data.startingTimeStamps);
+  //     setEND_TIME(data.endingTimeStamps);
 
-} ,[])
+  //   }
+
+  //   GetVotingTime();
+
+  // }, [])
 
   useEffect(() => {
 
 
-   
+
 
     if (Date.now() > START_TIME && Date.now() < END_TIME) {
 
@@ -89,7 +90,7 @@ GetVotingTime();
 
 
 
-  }, [START_TIME , END_TIME]);
+  }, [START_TIME, END_TIME]);
 
   function checkVotingTimes(intervalId: any) {
     if (Date.now() > END_TIME) {
@@ -469,7 +470,3 @@ export default SetTimer
 
 
 
-
-
-// {error && <p>{error}</p>}
-// { message && <p>{message}</p> }

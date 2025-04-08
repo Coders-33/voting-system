@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BACKEND_URL, cacheTime } from '../script/GetData';
+import { BACKEND_URL } from '../script/GetData';
 import ResultCard from '../Small-components/ResultCard';
 import Navbar from '../Small-components/Navbar';
 import Footer from './Footer';
@@ -15,6 +15,7 @@ import {
 } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Pie } from 'react-chartjs-2';
+import { useAuthContext } from '../Context/UserContext';
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title, ChartDataLabels);
 
@@ -33,12 +34,15 @@ function ElectionResult() {
     const navigate = useNavigate();
     const [positionWinners, setPositionWinners] = useState<Record<string, Winner>>({});
     const [winnerParty, setWinnerParty] = useState<WinningPartyPayload>();
+    const [partyVotes, setPartyVotes] = useState<any>({});
     const [showMain, setShowMain] = useState(false);
 
+    const { MAX_TIME} = useAuthContext();
+ 
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowMain(true);
-        }, 1000);
+        }, 500);
         return () => clearTimeout(timer);
     }, []);
 
@@ -48,9 +52,9 @@ function ElectionResult() {
                 const res = await fetch(`${BACKEND_URL}/votes/get-winner-result`);
                 const result = await res.json();
                 if (res.ok && result.data) {
-                    const { positionWinners, winningParty } = result.data;
-                    setWinnerParty(winningParty);
-                    setPositionWinners(positionWinners);
+
+                    ElectionResultVotes(result.data);
+
                 } else {
                     console.log(result.error);
                 }
@@ -61,16 +65,25 @@ function ElectionResult() {
         fetchFinalResult();
     }, []);
 
+
+    function ElectionResultVotes(data: any) {
+        const { partyVotes, positionWinners, winningParty } = data;
+        setPartyVotes(partyVotes);
+        setWinnerParty(winningParty);
+        setPositionWinners(positionWinners);
+
+    }
+
+
     if (!showMain) return <Preloader />;
-    if (Date.now() < cacheTime) {
+
+
+    if (Date.now() < MAX_TIME) {
         navigate('/');
         return null;
     }
 
-    const partyVotes: Record<string, number> = {};
-    Object.values(positionWinners).forEach(({ party, votes }) => {
-        partyVotes[party] = (partyVotes[party] || 0) + votes;
-    });
+
 
     const chartData = {
         labels: Object.keys(partyVotes),
@@ -131,7 +144,7 @@ function ElectionResult() {
                         ))}
                     </div>
 
-                    <div>
+                    <div className={styles.chartAndWinnerParty} >
                         <div className={styles.chartWrapper}>
                             <Pie data={chartData} options={chartOptions} />
                         </div>

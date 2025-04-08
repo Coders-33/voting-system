@@ -1,4 +1,4 @@
-export function formatTimings(time: Date) {
+export function formatTimings(time: number) {
     const dateObj = new Date(time);
     const date = dateObj.getDate().toString().padStart(2, "0");
     const month = dateObj.getMonth().toString().padStart(2, "0");;

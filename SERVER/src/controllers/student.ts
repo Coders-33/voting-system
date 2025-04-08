@@ -296,7 +296,7 @@ export async function handleStudentQuery(req: Request, res: Response) {
             to: process.env.EMAIL_USER, // your own inbox
             subject: `Student Query from ${name}`,
             text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
-            replyTo: email 
+            replyTo: email
         };
 
 
@@ -314,6 +314,25 @@ export async function handleStudentQuery(req: Request, res: Response) {
     }
 }
 
+
+export async function getAllStudentsCount(req: Request, res: Response) {
+
+    try {
+
+        const studentsCount = await studentDoc.find().countDocuments();
+        if (!studentsCount) {
+            res.status(404).json({ error: "No users found" });
+            return;
+        }
+
+        res.status(200).json({ studentsCount });
+
+
+    }
+    catch (error: any) {
+        res.status(505).json({ error })
+    }
+}
 
 
 // ----------  Other Logic Functions   -------  //

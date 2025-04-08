@@ -3,7 +3,7 @@ import styles from "../Styling/Voting.module.css";
 import Footer from "./Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { BACKEND_URL, startingTime, } from "../script/GetData";
+import { BACKEND_URL, GetVotingTimings, startingTime, } from "../script/GetData";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuthContext } from "../Context/UserContext";
@@ -12,7 +12,7 @@ import Preloader from "../Small-components/PreLoader";
 
 function Voting() {
 
-  const { user } = useAuthContext();
+  const { user, START_TIME, END_TIME } = useAuthContext();
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -51,13 +51,15 @@ function Voting() {
 
 
   const [showMain, setShowMain] = useState<boolean>(false);
+  // const [START_TIME, setSTART_TIME] = useState<number>(0);
+  // const [END_TIME, setEND_TIME] = useState<number>(0);
 
 
   useEffect(() => {
     const timer = setTimeout(() => {
       // true  after two seconds
       setShowMain(true);
-    }, 1000);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -93,6 +95,17 @@ function Voting() {
 
       setAllParties(parties);
     }
+
+
+    // async function GetVotingTime() {
+
+    //   const data = await GetVotingTimings();
+
+    //   setSTART_TIME(data.startingTimeStamps);
+    //   setEND_TIME(data.endingTimeStamps);
+    // }
+
+    // GetVotingTime();
 
     GetAllParties();
 
@@ -191,7 +204,7 @@ function Voting() {
 
     const votingData = {
       studentId: DATA_studentid,
-      studentEmail : user?.email,
+      studentEmail: user?.email,
       panelCode: panelcode
     }
 
@@ -235,10 +248,12 @@ function Voting() {
     }
   }
 
-  if (Date.now() < startingTime) {
-    window.location.href = "/";
-    navigate("/");
-    return;
+  if (START_TIME) {
+    if (Date.now() < START_TIME) {
+      window.location.href = "/";
+      navigate("/");
+      return;
+    }
   }
 
   if (user?.userId != id) {
@@ -457,7 +472,7 @@ function Voting() {
             </div>
 
             <div className={styles.boxContainer}>
-           
+
               <div id={styles.innerBoxs} >
                 <p id={styles.CandidatePost}>VICE PRESIDENT</p>
                 <div className={styles.eachSectionCandidate}>

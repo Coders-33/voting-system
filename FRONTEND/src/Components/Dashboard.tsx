@@ -10,11 +10,11 @@ import FooterImage from "../images/footerImage.jpg";
 import Footer from "./Footer";
 
 import { Images } from "../script/GetImages";
-import { GetVotingTimings } from "../script/GetData";
 import { useEffect, useRef, useState } from "react";
 import Navbar from "../Small-components/Navbar";
 import Preloader from "../Small-components/PreLoader";
 import { formatTimings } from "../script/FormatTime";
+import { useAuthContext } from "../Context/UserContext";
 
 
 let intervalId: any;
@@ -23,9 +23,6 @@ function Dashboard() {
   const [leftHours, setLeftHours] = useState<number>(0);
   const [leftMinutes, setLeftMinutes] = useState<number>(0);
   const [leftSeconds, setLeftSeconds] = useState<number>(0);
-  const [maxTime, setMaxTime] = useState<number>(0);
-  const [startingTime, setStartingTime] = useState<number>(0);
-  const [voteEndTime, setEndTime] = useState<number>(0);
   const [scrollAmount, setScrollAmount] = useState<number>(0);
 
   const [votingDate, setVotingDate] = useState<{ date: string, hours: any }>({ date: "", hours: "" });
@@ -36,7 +33,7 @@ function Dashboard() {
   const partyRef4 = useRef<HTMLDivElement>(null);
 
   const [showMain, setShowMain] = useState(false);
-
+  const { MAX_TIME, START_TIME, END_TIME } = useAuthContext();
 
   const localStyles: any = {
 
@@ -84,21 +81,17 @@ function Dashboard() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowMain(true);
-    }, 1000);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);
 
 
-  // GETTING VOTE TIMES FROM BACKEND
+  // SETTING VOTE TIMINGS
   useEffect(() => {
 
     async function getTimings() {
-      const times = await GetVotingTimings();
-      setEndTime(times.endingTimeStamps);
-      setMaxTime(times.cacheTime);
-      setStartingTime(times.startingTimeStamps);
-      const timeData = formatTimings(times.startingTimeStamps);
+      const timeData = formatTimings(START_TIME);
       setVotingDate({
         date: timeData.votingDateTimes,
         hours: timeData.formatedHours,
@@ -107,19 +100,19 @@ function Dashboard() {
     }
 
     getTimings();
-  }, []);
+  }, [START_TIME]);
 
 
   // START THE TIMER ONCE YOU GET IT 
   useEffect(() => {
-    if (voteEndTime > 0) {
+    if (START_TIME > 0) {
       intervalId = setInterval(() => {
         Timer();
       }, 1000);
     }
 
     return () => clearInterval(intervalId);
-  }, [voteEndTime]);
+  }, [START_TIME , END_TIME]);
 
 
   useEffect(() => {
@@ -161,10 +154,10 @@ function Dashboard() {
   }
 
 
-   // TIME FORMATING 
+  // TIME FORMATING 
   function Timer() {
     const currentTime = Date.now();
-    const calTime = maxTime - currentTime;
+    const calTime = MAX_TIME - currentTime;
 
     if (calTime <= 0) {
       setLeftHours(0);
@@ -208,7 +201,7 @@ function Dashboard() {
 
               {/* VOTE NOW TIMER  */}
               {
-                Date.now() < startingTime ?
+                Date.now() < START_TIME ?
 
                   // IF VOTING START SOON 
                   <div style={localStyles.NOT_STARTED}>
@@ -219,7 +212,7 @@ function Dashboard() {
 
                   <div>
                     {
-                      Date.now() > voteEndTime ?
+                      Date.now() > END_TIME ?
 
                         // IF VOTING ENDED 
                         <div style={localStyles.VOTING_END}>VOTING ENDED</div>

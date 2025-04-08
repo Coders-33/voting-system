@@ -1,5 +1,5 @@
 import { useContext, createContext, ReactNode, useReducer, Dispatch, useEffect, useState } from "react"
-import { BACKEND_URL } from "../script/GetData";
+import { BACKEND_URL, GetVotingTimings } from "../script/GetData";
 import { clearCookies } from "../script/GetData";
 type AuthContextProviderType = {
     children: ReactNode
@@ -46,6 +46,9 @@ type UserContextType = {
     setAdminLoggedIn: any;
     setAdminLoginStatus: (status: string) => void;
     setUserLoginStatus: (status: string) => void;
+    START_TIME : number;
+    END_TIME : number;
+    MAX_TIME : number;
 }
 
 const AuthContext = createContext<UserContextType | undefined>(undefined);
@@ -76,6 +79,7 @@ function Reducer(state: State, actions: ACTIONS) {
         case ACTIONS.REMOVE_ADMIN:
             return { ...state, admin: null }
 
+
         default: return state
     }
 
@@ -88,10 +92,14 @@ export function AuthContextProvider({ children }: AuthContextProviderType) {
     const [state, dispatch] = useReducer(Reducer, { user: null, admin: null });
     const [userLoggedIn, setUserLoggedIn] = useState<string>("FALSE");
     const [adminLoggedIn, setAdminLoggedIn] = useState<string>("FALSE");
+    const [START_TIME, setSTART_TIME] = useState<number>(0);
+    const [END_TIME, setEND_TIME] = useState<number>(0);
+    const [MAX_TIME , setMAX_TIME] = useState<number>(0);
 
 
     useEffect(() => {
 
+        GETVotingTimings();
         getUserLoginStatus();
         getAdminLoginStatus();
 
@@ -216,10 +224,22 @@ export function AuthContextProvider({ children }: AuthContextProviderType) {
     }
 
 
+    async function GETVotingTimings() {
+
+        const data = await GetVotingTimings();
+        const { cacheTime,  endingTimeStamps, startingTimeStamps } = data;
+
+        setSTART_TIME(startingTimeStamps);
+        setEND_TIME(endingTimeStamps);
+        setMAX_TIME(cacheTime);
+
+    }
+
+
 
     return (
 
-        <AuthContext.Provider value={{
+        <AuthContext.Provider value={{ START_TIME , END_TIME, MAX_TIME,
             admin: state.admin, user: state.user, setUserLoggedIn,
             dispatch, setAdminLoginStatus, setUserLoginStatus, setAdminLoggedIn
         }} >

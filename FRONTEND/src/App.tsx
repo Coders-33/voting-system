@@ -11,14 +11,32 @@ import { useAuthContext } from "./Context/UserContext"
 import Admin from "./Small-components/Admin"
 import About from "./Components/About"
 import AdminLogin from "./Components/AdminLogin"
-import { cacheTime, endingTime, startingTime } from "./script/GetData"
 import NotFound from "./Small-components/NotFound"
 import ElectionResult from "./Components/ElectionResult"
+import { useEffect, useState } from "react"
+import Preloader from "./Small-components/PreLoader"
 
 function App() {
 
 
-  const { user, admin } = useAuthContext();
+  const { user, admin, START_TIME, END_TIME } = useAuthContext();
+
+    const [showMain, setShowMain] = useState<boolean>(false);
+  
+  
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        // true  after two seconds
+        setShowMain(true);
+      }, 500);
+  
+      return () => clearTimeout(timer);
+    }, []);
+
+if(!showMain) {
+   return <Preloader/>
+}
+
 
   return (
     <>
@@ -29,14 +47,14 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/help" element={<Help />} />
-          {Date.now() > startingTime && <Route path="/live-result" element={user ? <LiveResult /> : <Login />} />}
-          {Date.now() > startingTime && Date.now() < endingTime && <Route path="/voting/:id" element={user ? <Voting /> : <Login />} />}
+          {Date.now() > START_TIME && <Route path="/live-result" element={user ? <LiveResult /> : <Login />} />}
+          {Date.now() > START_TIME && Date.now() < END_TIME && <Route path="/voting/:id" element={user ? <Voting /> : <Login />} />}
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/admin-access" element={admin ? <Admin /> : <AdminLogin />} />
           <Route path="/rs/:id1/:id2" element={<ResetPassword />} />
           <Route path="/about" element={<About />} />
           <Route path="/admin-login" element={admin ? <Admin /> : <AdminLogin />} />
-          {Date.now() > endingTime && <Route path="/election-result" element={<ElectionResult />} />}
+          {Date.now() > END_TIME && <Route path="/election-result" element={<ElectionResult />} />}
           <Route path="*" element={<NotFound />} />
 
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Bar } from "react-chartjs-2";
+import { Bar, Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   BarElement,
@@ -8,18 +8,23 @@ import {
   Title,
   Tooltip,
   Legend,
-  ChartData,
 } from "chart.js";
 import Footer from "./Footer";
 import styles from "../Styling/LiveResult.module.css";
 import Navbar from "../Small-components/Navbar";
 import { usePartyContext } from "../Context/PartyContext";
 import { arrangeAllVotes } from "../script/ChartData"
-import { cacheTime, startingTime } from "../script/GetData";
+import { cacheTime, ChartOptions,  fetchCountofStudents, fetchCountofVotedStudents, GetVotingTimings, startingTime } from "../script/GetData";
 import { useNavigate } from "react-router-dom";
+import Preloader from "../Small-components/PreLoader";
+import { useAuthContext } from "../Context/UserContext";
 
 ChartJS.register(BarElement, LinearScale, CategoryScale, Title, Tooltip, Legend);
 
+interface StudentVotePayload {
+  "TOTAL-STUDENTS": number,
+  "VOTED-STUDENTS": number
+}
 
 
 const LiveResult: React.FC = () => {
@@ -27,17 +32,80 @@ const LiveResult: React.FC = () => {
 
   const { fetchAllVotes, getPartyDetails } = usePartyContext();
   const [parties, setParties] = useState<string[]>([]);
+
   const [votes, setVotes] = useState<number[]>([]);
   const [partiesColor, setPartiesColor] = useState<string[]>([]);
- 
+  const [allChartData, setAllChartData] = useState<any>();
+  const [studentVotes, setStudentVotes] = useState<StudentVotePayload>({
+    "TOTAL-STUDENTS": 0,
+    "VOTED-STUDENTS": 0
+
+  });
+
+  // const [START_TIME, setSTART_TIME] = useState<number>(0);
+  // const [END_TIME, setEND_TIME] = useState<number>(0);
   const navigate = useNavigate();
+  const { START_TIME , END_TIME } = useAuthContext();
+
+
+  const [showMain, setShowMain] = useState<boolean>(false);
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // true  after two seconds
+      setShowMain(true);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
 
 
   useEffect(() => {
 
+    async function getTotalstudents() {
+      const studentsCount: any = await fetchCountofStudents();
+
+      setStudentVotes(prev => ({ ...prev, "TOTAL-STUDENTS": studentsCount }));
+
+    }
+
+    // async function GetVotingTime() {
+
+    //   const data = await GetVotingTimings();
+
+    //   setSTART_TIME(data.startingTimeStamps);
+    //   setEND_TIME(data.endingTimeStamps);
+    // }
+
+    // GetVotingTime();
+    getTotalstudents();
+
+  }, []);
+
+  useEffect(() => {
+
+    function ChartData() {
+      const allData = ChartOptions(parties, partiesColor, votes, studentVotes);
+      setAllChartData(allData);
+    }
+
+    ChartData();
+
+  }, [parties, partiesColor, votes, studentVotes])
+
+  useEffect(() => {
+
     const GetAllVotes = async () => {
-      const allvotes = await fetchAllVotes();
-      const partyData = await getPartyDetails();
+
+      const [allvotes, partyData, votedStudents]: any = await Promise.all([
+        fetchAllVotes(),
+        getPartyDetails(),
+        fetchCountofVotedStudents()
+      ]);
+
+      setStudentVotes(prev => ({ ...prev, "VOTED-STUDENTS": votedStudents }));
+
       SetpartyNames(partyData);
       SetPartyColors(partyData);
       const newvotes = arrangeAllVotes(partyData, allvotes);
@@ -52,6 +120,8 @@ const LiveResult: React.FC = () => {
     const intervalId = setInterval(GetAllVotes, 5000);
     return () => clearInterval(intervalId);
   }, []);
+
+
 
   function checkVotingTimes(intervalId: any) {
     if (Date.now() > cacheTime) {
@@ -78,29 +148,20 @@ const LiveResult: React.FC = () => {
     partyColors = [];
   }
 
-  const data: ChartData<"bar"> = {
-    labels: parties,
-    datasets: [
-      {
-        label: "Votes",
-        data: votes,
-        backgroundColor: partiesColor,
-      },
-    ],
-  };
 
-  const options = {
-    responsive: true,
+  if (START_TIME && END_TIME) {
 
-    scales: {
-      y: { beginAtZero: true },
-    },
-  };
+    if (Date.now() < START_TIME || Date.now() > END_TIME) {
+      navigate("/");
+      return;
+    }
 
-if(Date.now() < startingTime || Date.now() > cacheTime) { 
- navigate("/");
- return;
-}
+  }
+
+
+  if (!showMain) {
+    return <Preloader />
+  }
 
 
   return (
@@ -110,6 +171,7 @@ if(Date.now() < startingTime || Date.now() > cacheTime) {
       </div>
 
       <div className={styles.votingResultContainer}>
+
         <div className={styles.allPartiesVotes}>
           <h3>🗳️ All Votes</h3>
           <table className={styles.voteTable}>
@@ -138,10 +200,18 @@ if(Date.now() < startingTime || Date.now() > cacheTime) {
 
 
 
-        <div className={styles.votingGraph}>
-          <h2>Live Voting Result</h2>
-          <Bar key={JSON.stringify(votes)} data={data} options={options} />
+        <div className={styles.votingGraph} >
+          <h2 style={{ color: "black" }}>Students Votes Analysis</h2>
+          {allChartData && <Pie key={JSON.stringify(studentVotes)} data={allChartData?.pieData} options={allChartData?.pieOptions} />}
         </div>
+
+        <div className={styles.votingGraph}>
+          <h2 style={{ color: "black" }} >Live Voting Result</h2>
+          {allChartData && <Bar style={{ width: "300px" }} key={JSON.stringify(votes)} data={allChartData?.barData} options={allChartData?.barOptions} />}
+        </div>
+
+
+
       </div>
 
       <div>

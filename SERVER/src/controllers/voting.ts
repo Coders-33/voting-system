@@ -151,6 +151,27 @@ export async function getAllWinnerAndResult(req: Request, res: Response) {
 
 }
 
+
+export async function handleGetCountVotes(req: Request, res: Response) {
+  try {
+
+        const votedStudentsCount = await votesDoc.find().countDocuments();
+        if (!votedStudentsCount) {
+            res.status(404).json({ error: "No Votes found" });
+            return;
+        }
+
+        res.status(200).json({ votedStudentsCount });
+
+
+    }
+    catch (error: any) {
+        res.status(505).json({ error })
+    }
+
+}
+
+
 function handleSortData(parties: any[], votes: any[]) {
   const positions = ['President', 'VicePresident', 'GeneralSecretary', 'JointSecretary'];
 

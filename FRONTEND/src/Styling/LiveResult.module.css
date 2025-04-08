@@ -9,13 +9,14 @@
 }
 
 
-
 .votingGraph {
-    height: 400px;
-    width: 700px;
+    height: 500px;
+    width: 500px;
     display: flex;
+    align-items: center;
+    justify-content: center;
     flex-direction: column;
-    flex-grow: 0;
+    flex-grow: 1;
     flex-shrink: 0;
     padding: 50px;
     margin-bottom: 40px;

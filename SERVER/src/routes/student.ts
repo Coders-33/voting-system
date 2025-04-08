@@ -5,7 +5,8 @@ handleSendOTP,
 handleSignUp,
 handleVerificationOfOTP,
 handleChangePasscode,
-handleStudentQuery
+handleStudentQuery,
+getAllStudentsCount
 
 
 } from "../controllers/student";
@@ -17,12 +18,11 @@ const  router = Router();
 
 router.post("/login" , upload.none() , handleStudentLogin);
 router.post("/signup" , handleSignUp);
-
 router.post("/forget-password/sendOTP" , handleSendOTP);
 router.post("/send-query" , handleStudentQuery);
 router.post("/forget-password/verifyOTP" , handleVerificationOfOTP);
 router.post("/changePassword"  , handleChangePasscode);
-
+router.get("/students-count" , getAllStudentsCount);
 
 
 

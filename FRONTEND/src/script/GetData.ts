@@ -5,7 +5,7 @@ export const BACKEND_URL = "http://192.168.1.5:5000";
 // only for the system 
 // export const BACKEND_URL = "http://localhost:5000";
 
-
+import { ChartData } from "chart.js";
 
 export let cacheTime: any = 0;
 export let startingTime: any = 0;
@@ -188,3 +188,112 @@ export function GenerateRelaventQuestion(question: string) {
 }
 
 
+export async function fetchCountofStudents(): Promise<number> {
+
+  let count: number = 0;
+
+  try {
+
+    const response = await fetch(`${BACKEND_URL}/accounts/students-count`);
+
+    const result = await response.json();
+    if (result.studentsCount) {
+      count = result.studentsCount;
+      return count;
+    }
+
+    return count;
+  }
+  catch (error: any) {
+    throw new Error(error);
+  }
+
+
+}
+
+export async function fetchCountofVotedStudents() {
+  let count: number = 0;
+
+  try {
+
+    const response = await fetch(`${BACKEND_URL}/votes/voted-students`);
+
+    const result = await response.json();
+    if (result.votedStudentsCount) {
+      count = result.votedStudentsCount;
+      return count;
+    }
+
+    return count;
+  }
+  catch (error: any) {
+    throw new Error(error);
+  }
+}
+
+
+export function ChartOptions(parties: any, partiesColor: any, votes: any, studentVotes: any) {
+
+  const barData: ChartData<"bar"> = {
+    labels: parties,
+    datasets: [
+      {
+        label: "Votes",
+        data: votes,
+        backgroundColor: partiesColor,
+      },
+    ],
+  };
+
+
+  const barOptions = {
+    responsive: true,
+    scales: {
+      y: { beginAtZero: true },
+    },
+  };
+
+
+  const pieData: ChartData<"pie"> = {
+    labels: Object.keys(studentVotes),
+    datasets: [
+      {
+        label: 'Votes by Party',
+        data: Object.values(studentVotes),
+        backgroundColor: ['#3b82f6', '#facc15', '#a855f7', '#ef4444'],
+        borderColor: '#fff',
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const pieOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'bottom' as const,
+      },
+      title: {
+        display: true,
+        font: {
+          size: 18,
+        },
+      },
+      datalabels: {
+        formatter: (value: number, context: any) => {
+          const total = context.chart.data.datasets[0].data.reduce((a: number, b: number) => a + b, 0);
+          const percentage = ((value / total) * 100).toFixed(1);
+          return `${percentage}%`;
+        },
+        color: '#fff',
+        font: {
+          weight: 'bold' as const,
+          size: 14,
+        },
+      },
+    },
+  };
+
+  return { barData , pieData , barOptions , pieOptions }
+
+}
