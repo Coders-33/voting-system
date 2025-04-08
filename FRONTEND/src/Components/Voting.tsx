@@ -3,7 +3,7 @@ import styles from "../Styling/Voting.module.css";
 import Footer from "./Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { BACKEND_URL, GetVotingTimings, startingTime, } from "../script/GetData";
+import { BACKEND_URL } from "../script/GetData";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuthContext } from "../Context/UserContext";
@@ -12,7 +12,7 @@ import Preloader from "../Small-components/PreLoader";
 
 function Voting() {
 
-  const { user, START_TIME, END_TIME } = useAuthContext();
+  const { user, START_TIME  } = useAuthContext();
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -51,8 +51,6 @@ function Voting() {
 
 
   const [showMain, setShowMain] = useState<boolean>(false);
-  // const [START_TIME, setSTART_TIME] = useState<number>(0);
-  // const [END_TIME, setEND_TIME] = useState<number>(0);
 
 
   useEffect(() => {

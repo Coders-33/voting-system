@@ -14,7 +14,7 @@ import styles from "../Styling/LiveResult.module.css";
 import Navbar from "../Small-components/Navbar";
 import { usePartyContext } from "../Context/PartyContext";
 import { arrangeAllVotes } from "../script/ChartData"
-import { cacheTime, ChartOptions,  fetchCountofStudents, fetchCountofVotedStudents, GetVotingTimings, startingTime } from "../script/GetData";
+import { cacheTime, ChartOptions,  fetchCountofStudents, fetchCountofVotedStudents } from "../script/GetData";
 import { useNavigate } from "react-router-dom";
 import Preloader from "../Small-components/PreLoader";
 import { useAuthContext } from "../Context/UserContext";
@@ -42,8 +42,6 @@ const LiveResult: React.FC = () => {
 
   });
 
-  // const [START_TIME, setSTART_TIME] = useState<number>(0);
-  // const [END_TIME, setEND_TIME] = useState<number>(0);
   const navigate = useNavigate();
   const { START_TIME , END_TIME } = useAuthContext();
 
@@ -53,7 +51,6 @@ const LiveResult: React.FC = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      // true  after two seconds
       setShowMain(true);
     }, 500);
 

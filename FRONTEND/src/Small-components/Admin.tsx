@@ -48,24 +48,7 @@ function SetTimer() {
 
   const { START_TIME, END_TIME } = useAuthContext();
 
-  // const [START_TIME, setSTART_TIME] = useState<number>(0);
-  // const [END_TIME, setEND_TIME] = useState<number>(0);
 
-
-
-  // useEffect(() => {
-
-  //   async function GetVotingTime() {
-  //     const data = await GetVotingTimings();
-
-  //     setSTART_TIME(data.startingTimeStamps);
-  //     setEND_TIME(data.endingTimeStamps);
-
-  //   }
-
-  //   GetVotingTime();
-
-  // }, [])
 
   useEffect(() => {
 
@@ -296,7 +279,7 @@ function SetTimer() {
   }
 
   async function DeleteHttpCookie() {
-    const res = await fetch(`${BACKEND_URL}/auth/logout/?authName=admin`, {
+    await fetch(`${BACKEND_URL}/auth/logout/?authName=admin`, {
       method: "POST",
       credentials: "include"
     });

@@ -9,7 +9,7 @@ function Login() {
 
     const navigate = useNavigate();
 
-    const { dispatch, user, setUserLoggedIn  } = useAuthContext();
+    const { dispatch , setUserLoggedIn  } = useAuthContext();
 
     const emailInputRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLSpanElement>(null);

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useRef, useState } from "react";
 import styles from "../Styling/Dashboard.module.css";
 import logo from "../images/logo.jpeg";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,6 @@ import StudentProfile from "./StudentProfile";
 function Navbar() {
   const navigate = useNavigate();
 
-  const [error, setError] = useState<string | null>(null);
   const { user, admin, dispatch, setUserLoginStatus, setUserLoggedIn } = useAuthContext();
   const [leftSideBarEnable, setLeftSideBarEnable] = useState<boolean>(false);
   const leftBarRef = useRef<HTMLDivElement>(null);

@@ -1,4 +1,3 @@
-import React from 'react'
 import styles from  "../Styling/StudentProfile.module.css";
 import profileImage from "../images/avatars/8.png";
 import { useAuthContext } from '../Context/UserContext';

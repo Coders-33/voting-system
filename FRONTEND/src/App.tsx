@@ -21,21 +21,20 @@ function App() {
 
   const { user, admin, START_TIME, END_TIME } = useAuthContext();
 
-    const [showMain, setShowMain] = useState<boolean>(false);
-  
-  
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        // true  after two seconds
-        setShowMain(true);
-      }, 500);
-  
-      return () => clearTimeout(timer);
-    }, []);
+  const [showMain, setShowMain] = useState<boolean>(false);
 
-if(!showMain) {
-   return <Preloader/>
-}
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowMain(true);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!showMain) {
+    return <Preloader />
+  }
 
 
   return (
