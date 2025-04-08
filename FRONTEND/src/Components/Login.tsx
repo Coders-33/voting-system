@@ -9,7 +9,7 @@ function Login() {
 
     const navigate = useNavigate();
 
-    const { dispatch , setUserLoggedIn  } = useAuthContext();
+    const { dispatch , setUserLoggedIn  ,setUserLoginStatus } = useAuthContext();
 
     const emailInputRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLSpanElement>(null);
@@ -153,6 +153,7 @@ function Login() {
             const userToken = result.data;
             if (userToken) {
                 setUserLoggedIn('TRUE');
+                setUserLoginStatus('TRUE');
                 dispatch({ type: ACTIONS.SET_USER, payload: userToken });
             }
             navigate("/");

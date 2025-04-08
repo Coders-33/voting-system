@@ -1,4 +1,3 @@
-
 // for all device that are in current network
 export const BACKEND_URL = "http://192.168.1.5:5000";
 
@@ -254,6 +253,7 @@ export function ChartOptions(parties: any, partiesColor: any, votes: any, studen
   };
 
 
+
   const pieData: ChartData<"pie"> = {
     labels: Object.keys(studentVotes),
     datasets: [
@@ -294,6 +294,6 @@ export function ChartOptions(parties: any, partiesColor: any, votes: any, studen
     },
   };
 
-  return { barData , pieData , barOptions , pieOptions }
+  return { barData, pieData, barOptions, pieOptions }
 
 }

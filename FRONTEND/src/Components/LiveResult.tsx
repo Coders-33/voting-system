@@ -22,7 +22,7 @@ import { useAuthContext } from "../Context/UserContext";
 ChartJS.register(BarElement, LinearScale, CategoryScale, Title, Tooltip, Legend);
 
 interface StudentVotePayload {
-  "TOTAL-STUDENTS": number,
+  "REMAINING-STUDENTS": number,
   "VOTED-STUDENTS": number
 }
 
@@ -37,7 +37,7 @@ const LiveResult: React.FC = () => {
   const [partiesColor, setPartiesColor] = useState<string[]>([]);
   const [allChartData, setAllChartData] = useState<any>();
   const [studentVotes, setStudentVotes] = useState<StudentVotePayload>({
-    "TOTAL-STUDENTS": 0,
+    "REMAINING-STUDENTS": 0,
     "VOTED-STUDENTS": 0
 
   });
@@ -45,7 +45,7 @@ const LiveResult: React.FC = () => {
   const navigate = useNavigate();
   const { START_TIME , END_TIME } = useAuthContext();
 
-
+  let totalStudents : number = 0;
   const [showMain, setShowMain] = useState<boolean>(false);
 
 
@@ -62,20 +62,11 @@ const LiveResult: React.FC = () => {
 
     async function getTotalstudents() {
       const studentsCount: any = await fetchCountofStudents();
-
-      setStudentVotes(prev => ({ ...prev, "TOTAL-STUDENTS": studentsCount }));
+      totalStudents = studentsCount;
 
     }
 
-    // async function GetVotingTime() {
-
-    //   const data = await GetVotingTimings();
-
-    //   setSTART_TIME(data.startingTimeStamps);
-    //   setEND_TIME(data.endingTimeStamps);
-    // }
-
-    // GetVotingTime();
+   
     getTotalstudents();
 
   }, []);
@@ -102,7 +93,7 @@ const LiveResult: React.FC = () => {
       ]);
 
       setStudentVotes(prev => ({ ...prev, "VOTED-STUDENTS": votedStudents }));
-
+      setStudentVotes(prev => ({ ...prev, "REMAINING-STUDENTS": totalStudents - votedStudents }));
       SetpartyNames(partyData);
       SetPartyColors(partyData);
       const newvotes = arrangeAllVotes(partyData, allvotes);
