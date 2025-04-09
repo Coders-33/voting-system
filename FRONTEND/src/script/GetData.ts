@@ -1,8 +1,8 @@
 // for all device that are in current network
-export const BACKEND_URL = "http://192.168.1.5:5000";
+// export const BACKEND_URL = "http://192.168.1.5:5000";
 
 // only for the system 
-// export const BACKEND_URL = "http://localhost:5000";
+export const BACKEND_URL = "http://localhost:5000";
 
 import { ChartData } from "chart.js";
 

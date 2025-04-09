@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
         <div>
           <a href="https://www.facebook.com/sggschd" target="_blank" className="me-4 text-reset"><i className="fab fa-facebook-f"></i></a>
           <a href="https://x.com/i/flow/login?redirect_after_login=%2Fsggsc26chd" target="_blank" className="me-4 text-reset"><i className="fab fa-twitter"></i></a>
-          <a href="https://www.instagram.com/sggsclg_26chd/" target="_blank"  className="me-4 text-reset"><i className="fab fa-instagram"></i></a>
+          <a href="https://www.instagram.com/sggsc26chd/?igsh=eXJwcnkyMjk1N2Rl#" target="_blank" className="me-4 text-reset"><i className="fab fa-instagram"></i></a>
         </div>
       </section>
 
@@ -34,10 +34,8 @@ const Footer: React.FC = () => {
 
             <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
               <h6 className="text-uppercase fw-bold mb-4">Useful links</h6>
-              <p><a href="#!" className="text-reset">Login</a></p>
-              <p><a href="#!" className="text-reset">Parties List</a></p>
-              <p><a href="#!" className="text-reset">Live Result</a></p>
-              <p><a href="#!" className="text-reset">Help</a></p>
+              <p><a href="/contact" className="text-reset">Contact</a></p>
+              <p><a href="/help" className="text-reset">Help</a></p>
             </div>
 
             <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
@@ -53,7 +51,7 @@ const Footer: React.FC = () => {
 
       <div className={`text-center p-4 ${styles.copyright}`}>
         © 2025 Copyright:
-        <a className="text-reset fw-bold" href="https://mdbootstrap.com/"> SmartCampus.com</a>
+        <a className="text-reset fw-bold" href="/"> SmartCampus.com</a>
       </div>
     </footer>
   );

@@ -95,7 +95,7 @@ const navigate = useNavigate();
             <p>Follow us:</p>
             <a href="https://www.facebook.com/sggschd" target="_blank" className="me-4 text-reset"><i className="fab fa-facebook-f"></i></a>
             <a href="https://x.com/i/flow/login?redirect_after_login=%2Fsggsc26chd" target="_blank" className="me-4 text-reset"><i className="fab fa-twitter"></i></a>
-            <a href="https://www.instagram.com/sggsclg_26chd/" target="_blank" className="me-4 text-reset"><i className="fab fa-instagram"></i></a>
+            <a href="https://www.instagram.com/sggsc26chd/?igsh=eXJwcnkyMjk1N2Rl#" target="_blank" className="me-4 text-reset"><i className="fab fa-instagram"></i></a>
           </div>
 
         </div>
