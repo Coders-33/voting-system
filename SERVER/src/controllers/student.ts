@@ -120,8 +120,8 @@ export async function handleSignUp(req: Request, res: Response): Promise<void> {
         res.status(200).json({ createdStudent });
 
     }
-    catch (error) {
-        res.status(505).json({ error: `Sever Database error ${error}` })
+    catch (error: any) {
+        res.status(505).json({ error: error.message })
 
     }
 
