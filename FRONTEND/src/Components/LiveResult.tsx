@@ -19,6 +19,11 @@ import { useNavigate } from "react-router-dom";
 import Preloader from "../Small-components/PreLoader";
 import { useAuthContext } from "../Context/UserContext";
 
+
+
+
+
+
 ChartJS.register(BarElement, LinearScale, CategoryScale, Title, Tooltip, Legend);
 
 interface StudentVotePayload {
@@ -47,6 +52,8 @@ const LiveResult: React.FC = () => {
 
   let totalStudents : number = 0;
   const [showMain, setShowMain] = useState<boolean>(false);
+
+
 
 
   useEffect(() => {

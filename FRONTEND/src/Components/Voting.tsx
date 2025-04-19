@@ -4,7 +4,7 @@ import Footer from "./Footer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { BACKEND_URL } from "../script/GetData";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuthContext } from "../Context/UserContext";
 import { usePartyContext } from "../Context/PartyContext";
@@ -12,7 +12,7 @@ import Preloader from "../Small-components/PreLoader";
 
 function Voting() {
 
-  const { user, START_TIME  } = useAuthContext();
+  const { user, START_TIME } = useAuthContext();
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -63,25 +63,25 @@ function Voting() {
   }, []);
 
 
+  const  clearUi = useCallback(() =>  {
+    setError(null);
+    setMessage(null);
+    setVerificationError(null);
+    setVerificationMessage(null);
+
+  } , [error, message, verficationError, verficationMessage]);
+
+
   useEffect(() => {
 
-    function clearUi() {
-
-      const timeoutId = setTimeout(() => {
-        setError(null);
-        setMessage(null);
-        setVerificationError(null);
-        setVerificationMessage(null);
-      }, 1500);
+    const timeoutId = setTimeout(() => {
+      clearUi();
+    }, 1500);
 
 
-
-      return () => {
-        clearTimeout(timeoutId)
-      }
+    return () => {
+      clearTimeout(timeoutId)
     }
-
-    clearUi();
 
   }, [error, message, verficationError, verficationMessage])
 

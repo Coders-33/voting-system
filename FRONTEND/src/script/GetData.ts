@@ -1,8 +1,8 @@
 // for all device that are in current network
-// export const BACKEND_URL = "http://192.168.1.5:5000";
+export const BACKEND_URL = "http://172.10.1.194:5000";
 
 // only for the system 
-export const BACKEND_URL = "http://localhost:5000";
+// export const BACKEND_URL = "http://localhost:5000";
 
 import { ChartData } from "chart.js";
 
@@ -282,7 +282,7 @@ export function ChartOptions(parties: any, partiesColor: any, votes: any, studen
       datalabels: {
         formatter: (value: number, context: any) => {
           const total = context.chart.data.datasets[0].data.reduce((a: number, b: number) => a + b, 0);
-          const percentage = ((value / total) * 100).toFixed(1);
+          const percentage = ((value / total) * 100).toFixed(1)
           return `${percentage}%`;
         },
         color: '#fff',

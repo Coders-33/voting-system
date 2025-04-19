@@ -61,6 +61,8 @@ function Dashboard() {
 
     VOTE_NOW: {
       fontWeight: "bolder",
+      userSelect : "none",
+      cursor : "pointer",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -220,7 +222,7 @@ function Dashboard() {
                         :
 
                         // VOTE TIMER BINKING 
-                        <div style={localStyles.VOTE_NOW}>
+                        <div  style={localStyles.VOTE_NOW}>
                           <img src={voteNow} alt="" id={styles.voteNow} />
                           <p style={localStyles.VOTING_ENDS_IN}>
                             <span style={{ color: "white" }} >Voting End's In :</span>

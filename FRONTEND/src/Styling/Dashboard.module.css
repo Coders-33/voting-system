@@ -69,6 +69,7 @@
 
 .bottomContainer #voteNow {
   width: 300px;
+  user-select: none;
   animation: scaleEffect 1s infinite ease-in-out;
   border-radius: 100%;
 }

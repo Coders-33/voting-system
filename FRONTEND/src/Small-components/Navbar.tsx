@@ -147,7 +147,7 @@ function Navbar() {
         </div>
 
         <div className={styles.navRightSideItems}>
-          <button onClick={checkVotingEnded}  >Vote now</button>
+          <button  title="vote-now" onClick={checkVotingEnded}  >Vote now</button>
           {
             user ?
 
